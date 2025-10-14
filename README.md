@@ -1,0 +1,1 @@
+скопировать [development.env](development.env) и вставить просто env
