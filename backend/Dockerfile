@@ -1,6 +1,4 @@
 FROM docker.io/php:8.2.29-fpm
-# Для apache2 заменить на php:8.2.29-apache
-
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -20,8 +18,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-#Для apache2
-#RUN a2enmod rewrite
+# Установка Redis через PECL
+RUN pecl install redis && docker-php-ext-enable redis
 
 RUN docker-php-ext-configure gd --with-jpeg --with-webp
 
@@ -36,7 +34,4 @@ WORKDIR /var/www/html
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-#Для apache2
-#CMD ["apache2-foreground"]
-#Для Nginx
 CMD ["php-fpm", "-F"]
