@@ -30,6 +30,22 @@ services:
       --save 60 5
       --save 10 100
 
+  rabbitmq:
+    image: docker.io/rabbitmq:4.0-management
+    container_name: lesson-docker.rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-secret}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - ldocker
+
+
   nginx:
     image: docker.io/nginx:1.29.2
     container_name: nginx
@@ -98,6 +114,8 @@ volumes:
   mysql_data:
     driver: local
   redis_data:
+    driver: local
+  rabbitmq_data:
     driver: local
 
 networks:
