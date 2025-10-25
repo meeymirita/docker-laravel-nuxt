@@ -2,7 +2,9 @@
 set -e
 
 chown -R www-data:www-data /var/www/html/storage
-cd /var/www/html && cp .env.example .env
+if [ ! -f /var/www/html/.env ]; then
+    cd /var/www/html && cp .env.example .env
+fi
 
 echo "Ожидание MySQL..."
 while ! nc -z mysql 3306; do
