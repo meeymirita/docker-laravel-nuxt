@@ -22,7 +22,13 @@ services:
     networks:
       - ldocker
     # пароль для Redis
-    command: redis-server --requirepass ${REDIS_PASSWORD:-secret} --appendonly yes
+    command: redis-server
+      --requirepass ${REDIS_PASSWORD:-secret}
+      --appendonly yes
+      --appendfsync everysec
+      --save 300 1
+      --save 60 5
+      --save 10 100
 
   nginx:
     image: docker.io/nginx:1.29.2
