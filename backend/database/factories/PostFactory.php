@@ -18,7 +18,7 @@ class PostFactory extends Factory
     {
         return [
             'title' => fake()->realText(20),
-            'content' => fake()->text(300),
+            'content' => fake()->text(100),
             'likes' => fake()->numberBetween(20, 100)
         ];
     }
