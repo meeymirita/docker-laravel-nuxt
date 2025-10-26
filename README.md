@@ -1,4 +1,4 @@
-# Docker + Laravel + Nuxt
+# Docker + Nuxt + Laravel + RabbitMQ + Redis
 
 ## Скопировать файлик
 cp development.env .env
@@ -96,3 +96,4 @@ docker compose restart
 # Пересборка с очисткой 
 docker compose down --volumes --remove-orphans
 docker compose up -d --build
+
