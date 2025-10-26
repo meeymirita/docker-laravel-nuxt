@@ -25,7 +25,7 @@ RUN docker-php-ext-configure gd --with-jpeg --with-webp
 
 COPY --from=docker.io/composer:2.8.12 /usr/bin/composer /usr/bin/composer
 
-RUN docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd intl gmp
+RUN docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd intl gmp sockets
 
 RUN docker-php-ext-enable gd
 
