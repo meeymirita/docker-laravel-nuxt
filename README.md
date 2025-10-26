@@ -39,7 +39,7 @@ ____
 
 ### http://localhost:8080 - Laravel 
 ### http://localhost:3000 - Nuxt.js 
-### http://localhost:15672 - RabbitMQ  (admin/secret) странно но пустка по левым данным которые дефолт
+### http://localhost:15672 - RabbitMQ  (admin/secret) странно но пускает по левым данным которые дефолт
 ### http://localhost:3306 - phpMyAdmin
 
 # Подключение к базе данных
@@ -87,6 +87,7 @@ docker compose exec laravel php artisan optimize:clear
 ____
 ##  Перезапустить всё
 docker compose restart
+
 
 
 
