@@ -1,4 +1,4 @@
-# Docker + Laravel + Nuxt
+# Docker + Nuxt + Laravel + RabbitMQ + Redis
 
 ## Скопировать файлик
 cp development.env .env
@@ -6,7 +6,7 @@ cp development.env .env
 ## Запустить
 docker compose up -d
 ____
-## ⚠️ Решение проблем Laravel
+##  ошибка при первом разворе в контейнере Laravel
 # В контейнере Laravel если такая ошибка при первом старте
 ## The /var/www/html/bootstrap/cache directory must be present and writable.
 ### docker compose exec laravel chown -R www-data:www-data bootstrap/cache
@@ -16,30 +16,30 @@ ____
 
 ____
 
-## 🔥 Тестирование Redis
+## Redis
 
 # Redis test
 ### docker exec -it lesson-docker.redis redis-cli
-#### 127.0.0.1:6379> AUTH secret
+#### 127.0.0.1:6379> AUTH secret // secret пароль
 #### > OK
 #### 127.0.0.1:6379> ping
 #### PONG
 
 # если не работает
-### Проверить конфигурацию в [database.php](backend/config/database.php)
+### Проверить в [database.php](backend/config/database.php)
 'redis' => [
-'host' => env('REDIS_HOST', 'redis'),  # Должно быть 'redis' (имя контейнера)
+'host' => env('REDIS_HOST', 'redis'),  # Должно быть 'redis'
 'password' => env('REDIS_PASSWORD', null),
 'port' => env('REDIS_PORT', 6379),
 ],
 
 ____
 
-## 🌐 Доступ к сервисам
+##  Доступ к сервисам
 
 ### http://localhost:8080 - Laravel 
 ### http://localhost:3000 - Nuxt.js 
-### http://localhost:15672 - RabbitMQ Management (admin/secret)
+### http://localhost:15672 - RabbitMQ  (admin/secret) странно но пускает по левым данным которые дефолт
 ### http://localhost:3306 - phpMyAdmin
 
 # Подключение к базе данных
@@ -48,21 +48,21 @@ ____
 
 ____
 
-## 🗄️ Порты сервисов
+##  Порты сервисов
 
 ### 3307:3306 - MySQL база данных
 ### 6379:6379 - Redis кэширование
 ### 5672:5672 - RabbitMQ брокер
 ### 15672:15672 - RabbitMQ Management
 ### 8080 - Laravel
-### 3000 - Nuxt.js приложение
+### 3000 - Nuxt.js 
 ### 3306 - phpMyAdmin
 
 ____
 
-## 🛠 для меня
+##  для меня
 
-# Остановить всё
+# Остановить всё с удаление stop просто stop
 docker compose down
 
 # логи
@@ -72,15 +72,11 @@ docker compose down
 
 # Пересобрать контейнеры
 docker compose up -d --build
-
-# Проверить статус контейнеров
-docker compose ps
-
 ____
 
-## 🔧 Конфигурация Laravel
+## Laravel
 
-# Войти в контейнер Laravel
+# контейнер Laravel
 docker compose exec laravel bash
 
 # Очистка кэша
@@ -89,10 +85,9 @@ docker compose exec laravel php artisan config:clear
 docker compose exec laravel php artisan route:clear
 docker compose exec laravel php artisan optimize:clear
 ____
-## 🎯 
-# Перезапустить все сервисы
+##  Перезапустить всё
 docker compose restart
 
-# Пересборка с очисткой 
-docker compose down --volumes --remove-orphans
-docker compose up -d --build
+
+
+
