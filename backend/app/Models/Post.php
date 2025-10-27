@@ -10,5 +10,10 @@ class Post extends Model
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
     protected $table = 'posts';
-    protected $guarded = false;
+    protected $fillable = ['title', 'content', 'likes' , 'user_id'];
+
+    public function user() : \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

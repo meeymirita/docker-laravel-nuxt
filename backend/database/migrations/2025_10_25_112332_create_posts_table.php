@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('content');
             $table->integer('likes');
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }
