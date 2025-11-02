@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class EmailVerificationController extends Controller
 {
-    public function __construct(private UserService $userService) {}
-
     public function verify(VerifyEmailRequest $request)
     {
         $user = $request->getVerifyUser();

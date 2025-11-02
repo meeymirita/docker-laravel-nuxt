@@ -36,12 +36,4 @@ class UserService
             ];
         });
     }
-    public function generateToken(User $user): string
-    {
-        return $user->createToken(
-            'auth_token',
-            ['*'],
-            now()->addWeek()
-        )->plainTextToken;
-    }
 }

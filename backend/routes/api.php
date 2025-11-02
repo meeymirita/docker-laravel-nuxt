@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\User\EmailVerificationController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Route;
 
 //  без защиты
@@ -16,7 +17,8 @@ Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 've
 // защита санктумом и verified который проверяет подтверждена ли ебаная почта
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/profile', function () {
-        return auth()->user();
+        // resolve удаляет data {}
+        return (new UserResource(auth()->user()))->resolve();
     });
 
     Route::get('/dashboard', function () {
