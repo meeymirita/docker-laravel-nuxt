@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->name('user.')->group(function () {
     Route::post('/register', [UserController::class, 'register'])->name('register');
 });
-
+//q
 // подтверждение емаил
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
     ->middleware('signed')
