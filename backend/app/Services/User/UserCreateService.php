@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\User;
 
 
 use App\Enums\UserStatus;
 use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-class UserService
+use Illuminate\Support\Facades\Hash;
+
+class UserCreateService
 {
     public function createUser(array $userData)
     {
@@ -22,17 +23,24 @@ class UserService
                 'status' => UserStatus::Pending->value,
                 'password' => Hash::make($userData['password']),
             ]);
-            $token = $user->createToken(
-                'register_token',
-                ['*'],
-                now()->addWeek()
-            )->plainTextToken;
+//            $token = $user->createToken(
+//                'register_token',
+//                ['*'],
+//                now()->addWeek()
+//            )->plainTextToken;
 
-            event(new Registered($user));
+            try {
+                event(new Registered($user));
+            } catch (\Exception $e) {
+                \Log::error('e', [
+                    'error' => $e->getMessage(),
+                    'user_id' => $user->id
+                ]);
+            }
 
             return [
                 'user' => $user,
-                'token' => $token,
+//                'token' => $token,
             ];
         });
     }

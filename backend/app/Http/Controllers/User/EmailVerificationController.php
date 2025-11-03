@@ -4,8 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\VerifyEmailRequest;
-use App\Services\UserService;
+use App\Http\Requests\User\VerifyEmailRequest;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\DB;
 
