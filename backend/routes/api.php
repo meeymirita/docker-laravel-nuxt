@@ -7,10 +7,6 @@ use App\Http\Controllers\User\{CreateUserController,
     EmailVerificationController,
     ResetPasswordController
 };
-
-
-
-
 //  без защиты
 Route::prefix('user')->name('user.')->group(function () {
     Route::post('/register', [CreateUserController::class, 'register'])->name('register');
