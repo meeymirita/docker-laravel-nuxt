@@ -58,7 +58,4 @@
   text-shadow: 0 0 5px white;
 }
 
-body {
-  padding-top: 80px;
-}
 </style>

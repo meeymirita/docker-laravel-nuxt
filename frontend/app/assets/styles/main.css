@@ -1,13 +1,17 @@
 body {
-    background-image:url("https://images.wallpaperscraft.ru/image/single/devushka_volosy_shorty_1058776_2048x1152.jpg");
-    background-repeat:no-repeat;
-    background-size:cover;
+    background: linear-gradient(135deg, #1a1a2e, #4b1b8a, #6C22FF, #e94057);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
+    padding-top: 80px;
+
 }
+
 
 h1 {
     color: #6C22FF;
@@ -93,4 +97,17 @@ a{
 
 a:hover{
     border-bottom: 1px solid white;
+}
+
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
