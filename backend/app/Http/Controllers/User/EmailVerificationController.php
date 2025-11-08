@@ -19,7 +19,11 @@ class EmailVerificationController extends Controller
         }
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email уже подтверждён.'], 422);
+            return response()->json([
+                'message' => 'Email уже подтверждён.',
+                'status' => UserStatus::Active,
+                'success' => true,
+            ], 422);
         }
 
         try {
@@ -32,7 +36,11 @@ class EmailVerificationController extends Controller
                 event(new Verified($user));
             });
 
-            return response()->json(['message' => 'Ваш email успешно подтверждён!']);
+            return response()->json([
+                'message' => 'Ваш email успешно подтверждён!',
+                'status' => UserStatus::Active,
+                'success' => true,
+            ]);
         } catch (\Throwable $exception) {
             return response()->json([
                 'message' => 'Ошибка подтверждения email.',
