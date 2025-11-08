@@ -1,55 +1,52 @@
 body {
-    background: linear-gradient(135deg, #1a1a2e, #4b1b8a, #6C22FF, #e94057);
-    background-size: 400% 400%;
-    animation: gradientShift 8s ease infinite;
-
+    background-image: url('https://i.ytimg.com/vi/GeKxz5dOX6w/maxresdefault.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
-    padding-top: 80px;
-
 }
-
 
 h1 {
     color: #6C22FF;
-    font-family:"Bitcount Grid Single";
+    font-family: "Bitcount Grid Single";
     font-size: 50px;
-    color:aliceblue;
+    color: aliceblue;
 }
 
-.wrapper{
-    text-align:center;
+.wrapper {
+    text-align: center;
     /*display:inline-flexbox;*/
-    border:1px solid rgb(255, 255, 255);
-    border-radius:15px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 15px;
     opacity: 0.9;
     backdrop-filter: blur(30px);
-    width:500px;
+    width: 500px;
     height: auto;
     padding: 20px;
 
 
 }
+
 form input:first-of-type {
     margin-top: 20px;
 }
 
-#email_check{
+#email_check {
     padding: 30px;
 
 }
 
-input{
-    margin:5px;
-    border-radius:18px;
-    width:80%;
-    height:40px;
+input {
+    margin: 5px;
+    border-radius: 18px;
+    width: 80%;
+    height: 40px;
     background: transparent;
     border: 1px solid white;
-    font-family:"Bitcount Grid Single";
+    font-family: "Bitcount Grid Single";
     margin-bottom: 20px;
     padding: 8px 10px;
     line-height: normal;
@@ -59,55 +56,44 @@ input{
 }
 
 input::placeholder {
-    color:white;
+    color: white;
     top: 60%;
     font-size: 20px;
-    right:140px;
+    right: 140px;
 
 }
-.loginbut{
-    border-radius:18px;
+
+.loginbut {
+    border-radius: 18px;
     border-color: aliceblue;
-    width:80%;
-    height:40px;
-    margin:20px;
-    color:black;
+    width: 80%;
+    height: 40px;
+    margin: 20px;
+    color: black;
     background-color: white;
     margin-top: 15px;
     font-family: "Turret Road";
     font-size: 20px;
 
 }
-.loginbut:hover{
+
+.loginbut:hover {
 
     box-shadow: 0px 0px 10px 2px rgb(255, 255, 255);
 }
 
-.tip{
-    font-size:20px;
-    color:white;
+.tip {
+    font-size: 20px;
+    color: white;
     font-family: "Turret Road";
 }
 
-a{
-    color:rgb(255, 255, 255);
-    text-decoration:none;
+a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
     font-weight: bolder;
 }
 
-a:hover{
+a:hover {
     border-bottom: 1px solid white;
-}
-
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
 }
