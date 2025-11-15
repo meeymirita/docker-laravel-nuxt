@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\PostInterface;
+use App\Contracts\UserCreateInterface;
+use App\Services\Post\PostService;
+use App\Services\User\UserCreateService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -10,8 +14,12 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            \App\Contracts\UserCreateInterface::class,   // "Когда просят этот интерфейс"
-            \App\Services\User\UserCreateService::class  // "Дай этот класс"
+            UserCreateInterface::class,
+            UserCreateService::class
+        );
+        $this->app->bind(
+            PostInterface::class,
+            PostService::class
         );
     }
 

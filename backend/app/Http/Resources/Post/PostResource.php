@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Post;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserPostsResource extends JsonResource
+class PostResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

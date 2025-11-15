@@ -4,8 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\LoginUserRequest;
-use App\Http\Resources\LoginResponseResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\LoginResponseResource;
 use App\Services\User\UserLoginService;
 
 class LoginUserController extends Controller
