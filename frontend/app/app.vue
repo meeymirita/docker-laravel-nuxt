@@ -7,6 +7,7 @@
           <li><NuxtLink to="/email">Email</NuxtLink></li>
           <li><NuxtLink to="/password">Password</NuxtLink></li>
           <li><NuxtLink to="/registration">Registration</NuxtLink></li>
+          <li><NuxtLink to="/userprofile">userprofile</NuxtLink></li>
         </ul>
       </nav>
     </header>

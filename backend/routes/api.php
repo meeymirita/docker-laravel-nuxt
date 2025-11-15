@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Resources\UserResource;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\{CreateUserController,
     LoginUserController,
@@ -49,4 +50,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return response()->json(['message' => 'Dashboard data']);
     });
 });
-
+Route::get('/test', function() {
+    $data = Post::with('user:id,name,login', 'tags:id,name,color', 'comments.user:id,name')
+        ->find(1);
+    return $data;
+});
