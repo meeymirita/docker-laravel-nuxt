@@ -1,13 +1,24 @@
+<template>
+  <div>
+
+  </div>
+</template>
+
 <script setup>
+const data = ref(null)
 
 try {
-  const data = await $fetch('http://localhost:8080/api/test')
+  data.value = await $fetch('http://localhost:8080/api/test')
 } catch (e) {
   console.error(e)
 }
+
 console.log(data.value)
+
+
+
 </script>
 
-<template>
+<style lang="scss" scoped>
 
-</template>
+</style>
