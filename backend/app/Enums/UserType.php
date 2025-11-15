@@ -21,4 +21,9 @@ enum UserType: string
             self::SuperAdmin => 'Супер администратор',
         };
     }
+
+    public static function randomForFactory()
+    {
+        return self::cases()[array_rand(self::cases())];
+    }
 }

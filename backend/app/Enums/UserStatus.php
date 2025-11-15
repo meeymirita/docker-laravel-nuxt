@@ -23,4 +23,9 @@ enum UserStatus: string
             self::Rejected => 'Отклонен',
         };
     }
+
+    public static function randomForFactory()
+    {
+        return self::cases()[array_rand(self::cases())];
+    }
 }
