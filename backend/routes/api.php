@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Resources\UserResource;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,26 @@ Route::post('/send-reset-link', [ResetPasswordController::class, 'sendResetLink'
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
     ->name('password.reset');
 
+Route::prefix('posts')->name('posts.')->group(function () {
+    // все посты на главную
+    Route::get('/', [PostController::class, 'index'])->name('index');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        // посты авторизованного пользователя в профиле
+        Route::get('/my-posts', [PostController::class, 'userPosts'])->name('userPosts');
+    });
+    // посмотреть пост
+    Route::get('/{post}', [PostController::class, 'show'])->name('show');
+
+    // действия с постами авторизованного пользователя
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/', [PostController::class, 'store'])->name('store');
+        Route::put('/{post}', [PostController::class, 'update'])->name('update');
+        Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
+    });
+});
+
+
 Route::get('/check', function() {
     return response()->json([
         'authenticated' => Auth::check(),
@@ -50,6 +71,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return response()->json(['message' => 'Dashboard data']);
     });
 });
+
+
+
 Route::get('/test', function() {
     $data = Post::with('user:id,name,login', 'tags:id,name,color', 'comments.user:id,name')
         ->find(1);

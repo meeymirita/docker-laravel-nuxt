@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    {{data.comments}}
   </div>
 </template>
 
