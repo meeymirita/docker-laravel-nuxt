@@ -26,13 +26,13 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' =>  fake()->name(),
-            'login' =>  fake()->userName(),
-            'email' =>  fake()->email(),
-            'type' => UserType::randomForFactory(),
-            'status' => UserStatus::randomForFactory(),
-            'email_verified_at' =>  now(),
-            'password' => bcrypt(fake()->password()),
+            'name' => fake()->name(),
+            'login' => fake()->unique()->userName(),
+            'email' => fake()->unique()->safeEmail(),
+            'type' => UserType::User,
+            'status' => UserStatus::Active,
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }
