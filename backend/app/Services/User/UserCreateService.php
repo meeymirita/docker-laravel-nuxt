@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 
+use App\Contracts\UserCreateInterface;
 use App\Enums\UserStatus;
 use App\Enums\UserType;
 use App\Models\User;
@@ -10,7 +11,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class UserCreateService
+class UserCreateService implements UserCreateInterface
 {
     public function createUser(array $userData)
     {
