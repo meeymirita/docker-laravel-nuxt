@@ -110,7 +110,7 @@ services:
       - ./frontend:/app
     networks:
       - ldocker
-    command: sh -c "rm -rf node_modules package-lock.json .nuxt .output .cache && npm cache clean --force && npm install && npm run dev"
+    command: sh -c "rm -rf node_modules .nuxt .output .cache .vite dist .eslintcache && rm -f package-lock.json yarn.lock pnpm-lock.yaml && npm cache clean --force && npm install && npm run dev"
 
 volumes:
   mysql_data:
