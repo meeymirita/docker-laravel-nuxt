@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Contracts\UserCreateInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CreateUserRequest;
-use App\Http\Resources\RegisterResponseResource;
-use App\Contracts\UserCreateInterface;
+use App\Http\Resources\User\RegisterResponseResource;
 
 class CreateUserController extends Controller
 {

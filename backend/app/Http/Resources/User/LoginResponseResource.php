@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegisterResponseResource extends JsonResource
+class LoginResponseResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,9 @@ class RegisterResponseResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'message'   => 'Вы успешно зарегистрировались! Проверьте вашу почту и подтвердите email.',
+            'message'   => 'Авторизация Успешна',
             'user'      => new UserResource($this->resource['user']),
-//            'token'     => $this->resource['token'],
+            'token'     => $this->resource['token'],
         ];
     }
 
