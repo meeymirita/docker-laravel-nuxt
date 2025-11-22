@@ -3,6 +3,7 @@ set -e
 
 mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
 mkdir -p /var/www/html/bootstrap/cache
+mkdir -p /var/www/html/storage/logs
 
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
@@ -23,6 +24,12 @@ while ! nc -z redis 6379; do
 done
 echo "✅ Redis доступен!"
 
+echo "Ожидание RabbitMQ..."
+while ! nc -z rabbitmq 5672; do
+  sleep 1
+done
+echo "✅ RabbitMQ доступен!"
+
 if [ ! -d /var/www/html/vendor ] || [ ! -f /var/www/html/vendor/autoload.php ]; then
     echo "Установка Composer зависимостей..."
     composer install --no-dev --optimize-autoloader
@@ -33,5 +40,8 @@ php artisan storage:link
 php artisan key:generate
 php artisan migrate --force
 
-echo "✅ Laravel приложение готово!"
+echo "Laravel приложение готово!"
+echo "Запускаем PHP-FPM и Queue Worker через Supervisord..."
+
+#  Запускаем Supervisord (он уже указан в CMD Dockerfile)
 exec "$@"

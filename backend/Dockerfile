@@ -1,6 +1,6 @@
 FROM php:8.2.29-fpm
 
-# Устанавливаем необходимые пакеты
+# Устанавливаем необходимые пакеты + supervisor
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     libwebp-dev \
     netcat-openbsd \
     redis-tools \
+    supervisor \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Устанавливаем расширения PHP
@@ -31,10 +32,13 @@ COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 # Рабочая директория
 WORKDIR /var/www/html
 
+# Копируем конфиг Supervisord
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Копируем entrypoint
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
 
-# По умолчанию FPM
-CMD ["php-fpm", "-F"]
+# 🎯 Меняем CMD на Supervisord
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

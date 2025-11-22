@@ -16,7 +16,7 @@ class ProcessPostJob implements ShouldQueue
     public $action;
     public $data;
 
-    public function __construct(string $action, $data, string $queue) // 🎯 УБИРАЕМ array ТИП ДЛЯ $data
+    public function __construct(string $action, $data, string $queue)
     {
         $this->action = $action;
         $this->data = $data;
@@ -30,7 +30,7 @@ class ProcessPostJob implements ShouldQueue
         Log::info("🎯 Processing Post Job", [
             'action' => $this->action,
             'queue' => $this->queue,
-            'data_type' => gettype($this->data) // 🎯 ДОБАВИМ ДЛЯ ДЕБАГА
+            'data_type' => gettype($this->data)
         ]);
 
         switch ($this->action) {
@@ -43,11 +43,9 @@ class ProcessPostJob implements ShouldQueue
         }
     }
 
-    protected function handlePostCreated($data) // 🎯 УБИРАЕМ array ТИП
+    protected function handlePostCreated($data)
     {
-        // 🎯 ПРОВЕРЯЕМ ТИП ДАННЫХ
         if ($data instanceof Post) {
-            // Если передана модель Post
             $post = $data;
             Log::info("📝 Post created event processed (Model)", [
                 'post_id' => $post->id,

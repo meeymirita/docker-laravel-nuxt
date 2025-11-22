@@ -103,3 +103,26 @@ Route::get('/test-queue', function() {
         'queue' => 'post_created'
     ]);
 });
+Route::get('/check-queue-config', function() {
+    return [
+        'default_connection' => config('queue.default'),
+        'rabbitmq_config' => config('queue.connections.rabbitmq'),
+        'env_variables' => [
+            'QUEUE_CONNECTION' => env('QUEUE_CONNECTION'),
+            'RABBITMQ_QUEUE' => env('RABBITMQ_QUEUE'),
+            'RABBITMQ_HOST' => env('RABBITMQ_HOST'),
+        ],
+        'available_queues' => config('rabbitmq.queues', ['high', 'default', 'low'])
+    ];
+});
+Route::get('/test-queues', function() {
+    // Отправляем в разные очереди
+    \App\Jobs\TestQueueJob::dispatch('High priority task', 'high');
+    \App\Jobs\TestQueueJob::dispatch('Default priority task', 'default');
+    \App\Jobs\TestQueueJob::dispatch('Low priority task', 'low');
+
+    return response()->json([
+        'message' => 'Test jobs dispatched to different queues',
+        'queues' => ['high', 'default', 'low']
+    ]);
+});

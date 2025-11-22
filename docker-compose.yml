@@ -37,10 +37,10 @@ services:
       --save 60 5
       --save 10 100
     healthcheck:
-        test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-secret}", "ping" ]
-        interval: 30s
-        timeout: 10s
-        retries: 3
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-secret}", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   rabbitmq:
     image: docker.io/rabbitmq:4.0-management
@@ -87,9 +87,14 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      REDIS_HOST: redis
+      REDIS_HOST:  ${REDIS_HOST:-redis}
       REDIS_PASSWORD: ${REDIS_PASSWORD:-secret}
-      REDIS_PORT: 6379
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-rabbitmq}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-secret}
+      RABBITMQ_VHOST: /
     volumes:
       - ./backend:/var/www/html
     restart: always
@@ -99,6 +104,8 @@ services:
       mysql:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "php", "artisan", "env" ]

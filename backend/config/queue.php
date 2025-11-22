@@ -31,7 +31,7 @@ return [
         // 🐇 Исправленная RabbitMQ конфигурация
         'rabbitmq' => [
             'driver' => 'rabbitmq',
-            'queue' => env('RABBITMQ_QUEUE', 'laravel_queue'),
+            'queue' => env('RABBITMQ_QUEUE', 'default'),
             'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
 
             'hosts' => [
