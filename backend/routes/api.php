@@ -78,8 +78,28 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
 
-Route::get('/test', function() {
-    $data = Post::with('user:id,name,login', 'tags:id,name,color', 'comments.user:id,name')
-        ->find(1);
-    return $data;
+
+Route::get('/test-rabbitmq', function() {
+    \App\Jobs\TestRabbitMQJob::dispatch('Hello RabbitMQ!');
+    return response()->json(['message' => 'Job dispatched to RabbitMQ']);
+});
+// Добавь в routes/api.php для тестирования
+Route::get('/test-queue', function() {
+    $post = \App\Models\Post::first();
+
+    if (!$post) {
+        return response()->json(['error' => 'No posts found'], 404);
+    }
+
+    \App\Jobs\ProcessPostJob::dispatch(
+        action: 'post_created',
+        data: $post,
+        queue: 'post_created'
+    );
+
+    return response()->json([
+        'message' => 'Test job dispatched',
+        'post_id' => $post->id,
+        'queue' => 'post_created'
+    ]);
 });

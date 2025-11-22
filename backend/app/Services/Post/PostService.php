@@ -2,29 +2,37 @@
 
 namespace App\Services\Post;
 
-
 use App\Contracts\PostInterface;
 use App\Enums\ColorTag;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Services\RabbitMQ\RabbitMQService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Jobs\ProcessPostJob;
 
 class PostService implements PostInterface
 {
+    protected $rabbitMQService;
+
+    public function __construct(RabbitMQService $rabbitMQService)
+    {
+        $this->rabbitMQService = $rabbitMQService;
+    }
+
     public function store(array $data)
     {
-        $post = Post::create(
-            [
-                'user_id' => auth()->id(),
-                'title' => $data['title'],
-                'content' => $data['content'],
-            ]
-        );
-
+        // пост
+        $post = Post::create([
+            'user_id' => auth()->id(),
+            'title' => $data['title'],
+            'content' => $data['content'],
+        ]);
+        // теги
         if (isset($data['tags'])) {
             foreach ($data['tags'] as $tagName) {
                 $tag = Tag::firstOrCreate(
-                    ['name' => $tagName], // имя тега поиск
+                    ['name' => $tagName],
                     [
                         'slug' => Str::slug($tagName),
                         'color' => ColorTag::random()
@@ -33,9 +41,9 @@ class PostService implements PostInterface
                 $post->tags()->attach($tag->id);
             }
         }
+        // изображения
         if (isset($data['images'])) {
             foreach ($data['images'] as $image) {
-                // $image - это объект UploadedFile, используй его методы:
                 $path = $image->store('posts', 'public');
 
                 $post->images()->create([
@@ -47,14 +55,37 @@ class PostService implements PostInterface
                 ]);
             }
         }
+
+        $post->load(['tags', 'images', 'user']);
+        // отправка в очередь
+        $this->sendPostCreatedEvent($post, 'post_created');
+
         return $post;
+    }
+
+    /**
+     * Отправка события создания поста в RabbitMQ
+     */
+    protected function sendPostCreatedEvent(Post $post, string $queue)
+    {
+        try {
+            ProcessPostJob::dispatch(action: 'post_created', data: $post, queue: $queue);
+            Log::info("📨 Post creation event dispatched to queue: {$queue}", [
+                'post_id' => $post->id,
+                'queue' => $queue
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send post created event: ' . $e->getMessage());
+        }
     }
 
     public function destroy(array $data)
     {
+        // TODO: Implement destroy() method.
     }
 
     public function update(array $data)
     {
+        // TODO: Implement update() method.
     }
 }

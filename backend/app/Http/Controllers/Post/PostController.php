@@ -36,7 +36,12 @@ class PostController extends Controller
     }
     public function store(StoreRequest $request)
     {
-        $this->postService->store($request->validated());
+        $post = $this->postService->store($request->validated());
+        // docker-compose exec laravel php artisan queue:work rabbitmq --queue=post_created
+        return response()->json([
+            'message' => 'Post created successfully',
+            'post' => new PostResource($post)
+        ], 201);
     }
     // просмотр одного поста
     public function show(Post $post)
