@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ config('app.name', 'Laravel') }}</title>
     </head>
-    import_post_from_excel init
     <body class="body">
         <div class="image">
 
