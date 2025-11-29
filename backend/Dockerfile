@@ -1,4 +1,5 @@
-FROM php:8.2.29-fpm
+#FROM php:8.2.29-fpm
+FROM php:8.4-fpm
 
 # Устанавливаем необходимые пакеты + supervisor
 RUN apt-get update && apt-get install -y \
@@ -40,5 +41,5 @@ COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
 
-# 🎯 Меняем CMD на Supervisord
+# Меняем CMD на Supervisord
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

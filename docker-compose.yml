@@ -1,7 +1,7 @@
 services:
   mysql:
     image: docker.io/mysql:8.4.6
-    container_name: lesson-docker.mysql
+    container_name: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -20,7 +20,7 @@ services:
   #redis
   redis:
     image: docker.io/redis:7.4-alpine
-    container_name: lesson-docker.redis
+    container_name: redis
     restart: always
     ports:
       - "6379:6379"
@@ -44,7 +44,7 @@ services:
 
   rabbitmq:
     image: docker.io/rabbitmq:4.0-management
-    container_name: lesson-docker.rabbitmq
+    container_name: rabbitmq
     restart: always
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
