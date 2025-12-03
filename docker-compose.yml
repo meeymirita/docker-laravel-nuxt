@@ -119,7 +119,7 @@ services:
     container_name: phpmyadmin
     restart: always
     ports:
-      - "3306:80"
+      - "8081:80"
     environment:
       - UPLOAD_LIMIT=2G
       - PMA_HOST=${DB_HOST}
