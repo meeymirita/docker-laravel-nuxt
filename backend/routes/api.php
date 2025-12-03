@@ -83,7 +83,7 @@ Route::get('/test-rabbitmq', function() {
     \App\Jobs\TestRabbitMQJob::dispatch('Hello RabbitMQ!');
     return response()->json(['message' => 'Job dispatched to RabbitMQ']);
 });
-// Добавь в routes/api.php для тестирования
+// тест
 Route::get('/test-queue', function() {
     $post = \App\Models\Post::first();
 
@@ -116,7 +116,7 @@ Route::get('/check-queue-config', function() {
     ];
 });
 Route::get('/test-queues', function() {
-    // Отправляем в разные очереди
+    // разные очереди
     \App\Jobs\TestQueueJob::dispatch('High priority task', 'high');
     \App\Jobs\TestQueueJob::dispatch('Default priority task', 'default');
     \App\Jobs\TestQueueJob::dispatch('Low priority task', 'low');
