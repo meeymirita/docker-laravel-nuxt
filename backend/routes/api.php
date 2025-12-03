@@ -9,7 +9,7 @@ use App\Http\Controllers\User\{CreateUserController,
 use App\Http\Resources\User\UserResource;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
-
+//premain
 //  без защиты
 Route::prefix('user')->name('user.')->group(function () {
     Route::post('/register', [CreateUserController::class, 'register'])->name('register');
