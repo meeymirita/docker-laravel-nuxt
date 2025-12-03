@@ -70,7 +70,8 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./docker/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx.local.conf:/etc/nginx/conf.d/nginx.local.conf
+#     - ./docker/nginx/nginx.prod.conf:/etc/nginx/conf.d/nginx.prod.conf
       - ./backend:/var/www/html
     networks:
       - ldocker
