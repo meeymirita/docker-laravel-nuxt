@@ -1,6 +1,25 @@
 #!/bin/bash
 set -e
 
+echo "🔄 Настройка Laravel приложения..."
+
+# ========== ВЫБОР ПРАВИЛЬНОГО SUPERVISORD КОНФИГА ==========
+if [ "$APP_ENV" = "production" ]; then
+    echo "📋 Используем PRODUCTION supervisord конфиг"
+    if [ -f /var/www/html/docker/supervisord.prod.conf ]; then
+        cp /var/www/html/docker/supervisord.prod.conf /etc/supervisor/conf.d/supervisord.conf
+    else
+        echo "⚠️  Production конфиг не найден, используем local"
+        cp /var/www/html/docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+    fi
+else
+    echo "📋 Используем LOCAL supervisord конфиг"
+    cp /var/www/html/docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+fi
+
+echo "✅ Supervisord конфиг настроен для $APP_ENV"
+
+# ========== ОСТАЛЬНОЙ КОД (оставляем как есть) ==========
 mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
 mkdir -p /var/www/html/bootstrap/cache
 mkdir -p /var/www/html/storage/logs
@@ -43,5 +62,5 @@ php artisan migrate --force
 echo "Laravel приложение готово!"
 echo "Запускаем PHP-FPM и Queue Worker через Supervisord..."
 
-#  Запускаем Supervisord (он уже указан в CMD Dockerfile)
+# Запускаем Supervisord
 exec "$@"
