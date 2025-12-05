@@ -29,6 +29,7 @@ return [
         ],
 
         // 🐇 Исправленная RabbitMQ конфигурация
+        // 🐇 Исправленная RabbitMQ конфигурация
         'rabbitmq' => [
             'driver' => 'rabbitmq',
             'queue' => env('RABBITMQ_QUEUE', 'default'),
@@ -55,6 +56,29 @@ return [
                 'queue' => [
                     'job' => VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob::class,
                 ],
+            ],
+
+            'exchange' => env('RABBITMQ_EXCHANGE', 'default'),
+            'exchange_type' => env('RABBITMQ_EXCHANGE_TYPE', 'direct'),
+
+            'queue_declare_bind' => env('RABBITMQ_QUEUE_DECLARE_BIND', true),
+            'exchange_declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+
+            'queue_params' => [
+                'passive'     => false,
+                'durable'     => true,
+                'exclusive'   => false,
+                'auto_delete' => false,
+                'arguments'   => null,
+            ],
+
+            // Настройки exchange
+            'exchange_params' => [
+                'passive'     => false,
+                'durable'     => true,
+                'auto_delete' => false,
+                'internal'    => false,
+                'arguments'   => null,
             ],
 
             'worker' => env('RABBITMQ_WORKER', 'default'),
