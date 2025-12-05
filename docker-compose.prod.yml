@@ -136,7 +136,7 @@ services:
       - ./frontend:/app
     networks:
       - ldocker
-    command: sh -c "npm install && npm run build && npm run start"
+    command: sh -c "npm install && npm run build && node .output/server/index.mjs"
 
 volumes:
   mysql_prod_data:
