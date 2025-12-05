@@ -126,3 +126,6 @@ Route::get('/test-queues', function() {
         'queues' => ['high', 'default', 'low']
     ]);
 });
+Route::get('/test', function() {
+    return 'api test';
+});
