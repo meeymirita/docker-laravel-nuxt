@@ -28,11 +28,9 @@ return [
             'after_commit' => false,
         ],
 
-        // 🐇 Исправленная RabbitMQ конфигурация
-        // 🐇 Исправленная RabbitMQ конфигурация
         'rabbitmq' => [
             'driver' => 'rabbitmq',
-            'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'queue' => env('RABBITMQ_QUEUE', 'laravel_queue'),
             'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
 
             'hosts' => [
