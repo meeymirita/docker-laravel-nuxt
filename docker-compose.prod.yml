@@ -66,6 +66,7 @@ services:
       - ./backend:/var/www/html
       - ./frontend:/var/www/html/frontend
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./backend/storage/app/public:/var/www/html/storage/app/public:ro
     networks:
       - ldocker
     depends_on:
