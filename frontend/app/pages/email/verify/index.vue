@@ -53,7 +53,7 @@ const verifyEmail = async () => {
     }
     const prod = 'https://meeymirita.ru/';
     const local = 'http://localhost:8080/';
-    const response = await $fetch(`${local}api/email/verify/${id}/${hash}`, {
+    const response = await $fetch(`${prod}api/email/verify/${id}/${hash}`, {
       method: 'GET',
       params: {
         expires,
