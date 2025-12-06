@@ -24,30 +24,16 @@ class PostController extends Controller
     public function __construct(PostInterface $postService){
         $this->postService = $postService;
     }
-
-
     // Все посты всех пользователей на главную
 
     /**
      * @return AnonymousResourceCollection
      */
-    public function index() : Collection
+    public function index() : AnonymousResourceCollection
     {
         return PostResource::collection(
-            Post::query()->latest()->paginate(10)
-        );
-    }
-    // посты авторизиванного пользователя в его профиле
-
-    /**
-     * @return AnonymousResourceCollection
-     */
-    public function userPosts()
-    {
-        return UserPostResource::collection(
-            auth()->user()->posts()
-                ->with(['images', 'tags'])
-                ->paginate(10)
+            Post::query()->with(['images', 'tags'])
+                ->latest()->paginate(20)
         );
     }
 
@@ -58,14 +44,12 @@ class PostController extends Controller
     public function store(StoreRequest $request)
     {
         $post = $this->postService->store($request->validated());
-        // docker-compose exec laravel php artisan queue:work rabbitmq --queue=post_created
         return response()->json([
             'message' => 'Post created successfully',
             'post' => new PostResource($post)
         ], 201);
     }
     // просмотр одного поста
-
     /**
      * @param Post $post
      * @return PostResource

@@ -2,22 +2,35 @@
 
 use App\Http\Controllers\Image\ImageController;
 use App\Http\Controllers\Post\PostController;
-use App\Http\Controllers\User\{CreateUserController,
+use App\Http\Controllers\User\{AccountUserController,
+    CreateUserController,
     EmailVerificationController,
     LoginUserController,
-    ResetPasswordController};
+    LogoutUserController,
+    ResetPasswordController,
+    UpdateUserController};
 use App\Http\Resources\User\UserResource;
-use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+
 //premain
 //  без защиты
-Route::prefix('user')->name('user.')->group(function () {
-    Route::post('/register', [CreateUserController::class, 'register'])->name('register');
-    Route::post('/login', [LoginUserController::class, 'login'])->name('login');
-    Route::post('/update', [UpdateUserController::class, 'update'])
+Route::prefix('user')->name('user.')->group(callback: function () {
+    //ругистрация с отправкой письма на почту для подтверждения её
+    Route::post( '/register', action: [CreateUserController::class, 'register'])->name('register');
+    // вход в аккаунт
+    Route::post('/login', action: [LoginUserController::class, 'login'])->name('login');
+    /*
+     * Отдаёт текущего пользователя с его постами пагинация на 10 постов
+     */
+    Route::get('/profile', action: [AccountUserController::class, 'profile'])
+        ->middleware(['auth:sanctum'])
+        ->name('profile');
+    // обновление данных пользователя ТОЛЬКО ИНФОРМАЦИЯ О НЁМ СДЕЛАТЬ ТУТ
+    Route::post('/update', action: [UpdateUserController::class, 'update'])
         ->middleware(['auth:sanctum'])
         ->name('update');
-    Route::post('/logout', [LogoutUserController::class, 'logout'])
+    // выход из аккаунта
+    Route::post('/logout', action: [LogoutUserController::class, 'logout'])
         ->middleware(['auth:sanctum'])
         ->name('logout');
 
@@ -44,11 +57,6 @@ Route::post('/reset-password/{token}', [ResetPasswordController::class, 'passwor
 Route::prefix('posts')->name('posts.')->group(function () {
     // все посты на главную
     Route::get('/', [PostController::class, 'index'])->name('index');
-
-    Route::middleware('auth:sanctum')->group(function () {
-        // посты авторизованного пользователя в профиле
-        Route::get('/my-posts', [PostController::class, 'userPosts'])->name('userPosts');
-    });
     // посмотреть пост
     Route::get('/{post}', [PostController::class, 'show'])->name('show');
     // действия с постами авторизованного пользователя
@@ -63,8 +71,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
 });
 
 
-
-Route::get('/check', function() {
+Route::get('/check', function () {
     return response()->json([
         'authenticated' => Auth::check(),
         'user' => Auth::user()
@@ -83,14 +90,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 
-
-
-Route::get('/test-rabbitmq', function() {
+Route::get('/test-rabbitmq', function () {
     \App\Jobs\TestRabbitMQJob::dispatch('Hello RabbitMQ!');
     return response()->json(['message' => 'Job dispatched to RabbitMQ']);
 });
 // тест
-Route::get('/test-queue', function() {
+Route::get('/test-queue', function () {
     $post = \App\Models\Post::first();
 
     if (!$post) {
@@ -109,7 +114,7 @@ Route::get('/test-queue', function() {
         'queue' => 'post_created'
     ]);
 });
-Route::get('/check-queue-config', function() {
+Route::get('/check-queue-config', function () {
     return [
         'default_connection' => config('queue.default'),
         'rabbitmq_config' => config('queue.connections.rabbitmq'),
@@ -121,7 +126,7 @@ Route::get('/check-queue-config', function() {
         'available_queues' => config('rabbitmq.queues', ['high', 'default', 'low'])
     ];
 });
-Route::get('/test-queues', function() {
+Route::get('/test-queues', function () {
     // разные очереди
     \App\Jobs\TestQueueJob::dispatch('High priority task', 'high');
     \App\Jobs\TestQueueJob::dispatch('Default priority task', 'default');
@@ -132,7 +137,7 @@ Route::get('/test-queues', function() {
         'queues' => ['high', 'default', 'low']
     ]);
 });
-Route::get('/test', function() {
+Route::get('/test', function () {
     return 'api test';
 });
 Route::get('/test-mail', function () {

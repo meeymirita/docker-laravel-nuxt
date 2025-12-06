@@ -68,7 +68,7 @@ class PostService implements PostInterface
 
         $post->load(['tags', 'images', 'user']);
         // отправка в очередь -> передавать можно любую ребит под капотом сам создас
-        $this->sendPostCreatedEvent($post, 'post_created');
+        $this->sendPostCreatedEvent($post, 'user_post_created');
 
         return $post;
     }
