@@ -54,7 +54,9 @@ Route::post('/send-reset-link', [ResetPasswordController::class, 'sendResetLink'
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
     ->name('password.reset');
 
-Route::prefix('posts')->name('posts.')->group(function () {
+Route::prefix('posts')
+    ->name('posts.')
+    ->group(function () {
     // все посты на главную
     Route::get('/', [PostController::class, 'index'])->name('index');
     // посмотреть пост
