@@ -100,7 +100,6 @@ services:
       RABBITMQ_VHOST: /
     volumes:
       - ./backend:/var/www/html
-      - laravel_storage:/var/www/html/storage
     networks:
       - ldocker
     depends_on:
@@ -143,8 +142,6 @@ volumes:
   redis_prod_data:
     driver: local
   rabbitmq_prod_data:
-    driver: local
-  laravel_storage:
     driver: local
   node_modules:
     driver: local
