@@ -129,3 +129,16 @@ Route::get('/test-queues', function() {
 Route::get('/test', function() {
     return 'api test';
 });
+Route::get('/test-mail', function () {
+    try {
+        \Mail::raw('Тестовое письмо из Laravel', function ($message) {
+            $email = 'nik.lyamkin@yandex.ru';
+            $message->to($email)
+                ->subject('Тест отправки почты');
+        });
+
+        return 'Письмо отправлено!';
+    } catch (\Exception $e) {
+        return 'Ошибка: ' . $e->getMessage();
+    }
+});
