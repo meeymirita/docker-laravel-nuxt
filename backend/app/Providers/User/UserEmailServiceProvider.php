@@ -28,7 +28,7 @@ class UserEmailServiceProvider extends ServiceProvider
     protected function configureEmailVerification(): void
     {
         VerifyEmail::toMailUsing(function ($notifiable) {
-            $verifyUrl = URL::temporarySignedRoute(
+            $backendUrl = URL::temporarySignedRoute(
                 'verification.verify',
                 now()->addMinutes(config('auth.verification.expire', 60)),
                 [
@@ -36,28 +36,41 @@ class UserEmailServiceProvider extends ServiceProvider
                     'hash' => sha1($notifiable->getEmailForVerification()),
                 ]
             );
+            $typeAppEnv = config('app.env');
 
-            // Парсим URL чтобы получить все параметры
-            $parsedUrl = parse_url($verifyUrl);
-            $path = $parsedUrl['path']; // /api/email/verify/19/908e0e2...
+            if ($typeAppEnv === 'local') {
+                $frontendUrl = config('app.frontend_url_local', 'http://localhost:8080');
+            } else {
+                $frontendUrl = config('app.frontend_url_production', 'https://meeymirita.ru');
+            }
+
+            $parsedUrl = parse_url($backendUrl);
+            $path = $parsedUrl['path'];
+
+            preg_match('/\/api\/email\/verify\/(\d+)\/([^?]+)/', $path, $matches);
+
+            if (!isset($matches[1]) || !isset($matches[2])) {
+                throw new \Exception('Failed to parse verification URL');
+            }
+
+            $id = $matches[1];
+            $hash = $matches[2];
             $query = $parsedUrl['query'] ?? ''; // expires=...&signature=...
 
-            // Извлекаем id и hash из path
-            preg_match('/\/api\/email\/verify\/(\d+)\/(.+)/', $path, $matches);
-            $id = $matches[1] ?? '';
-            $hash = $matches[2] ?? '';
-
-            // Собираем фронтенд URL с ВСЕМИ параметрами в query string
-            $frontendUrl = config('app.frontend_url', 'http://localhost:3000');
-            $frontendVerifyUrl = $frontendUrl . '/email-verify?' . http_build_query([
+            $frontendVerifyUrl = $frontendUrl . '/email/verify?' . http_build_query([
                     'id' => $id,
                     'hash' => $hash,
                 ]);
 
-            // Добавляем остальные query параметры (expires, signature)
             if ($query) {
-                $frontendVerifyUrl .= '&' . $query;
+                parse_str($query, $queryParams);
+                $frontendVerifyUrl .= '&' . http_build_query([
+                        'expires' => $queryParams['expires'] ?? '',
+                        'signature' => $queryParams['signature'] ?? ''
+                    ]);
             }
+
+            \Log::info('Generated frontend URL:', ['url' => $frontendVerifyUrl]);
 
             return (new MailMessage)
                 ->subject('Подтверждение email')
