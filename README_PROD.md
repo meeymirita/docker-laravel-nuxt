@@ -1,19 +1,19 @@
 Документация по развертыванию проекта (Laravel + Nuxt)
-✅ Статика Nuxt: https://meeymirita.ru/_nuxt/entry.ZdVBaBXW.css → 200 OK
-✅ Картинки из Laravel: https://meeymirita.ru/storage/me.jpg → 200 OK
+
+✅ Картинки из Laravel: https://meeymirita.ru/storage/posts/IXIIVwWIJFGF1nGf2vNuaxH9HDn61RhyEvS3zT00.jpg → 200 OK
 ✅ Главная страница: https://meeymirita.ru/ → 200 OK (от Nuxt)
 🚀 Быстрый запуск
 1. Клонирование и настройка
    bash
-   git clone <ваш-репозиторий>
+   git clone _<ваш-репозиторий>
    cd mirita
-   cp [development.env](development.env) .env
+   cp [development.env](development.env) .env_
 # Заполните .env файл (DB, APP_KEY и др.)
 2. Запуск в продакшн
    bash
 # Сборка и запуск
 docker-compose -f docker-compose.prod.yml up -d --build
-
+docker-compose -f docker-compose.prod.yml exec laravel php artisan storage:link --force
 # Проверка статуса
 docker-compose -f docker-compose.prod.yml ps
 
