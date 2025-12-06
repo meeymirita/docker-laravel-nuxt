@@ -15,6 +15,10 @@ class TestQueueJob implements ShouldQueue
     public $message;
     public $queue;
 
+    /**
+     * @param string $message
+     * @param string $queue
+     */
     public function __construct(string $message, string $queue = 'default')
     {
         $this->message = $message;
@@ -24,6 +28,9 @@ class TestQueueJob implements ShouldQueue
         $this->onQueue($queue);
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         Log::info("🎯 Test Queue Job Executed", [

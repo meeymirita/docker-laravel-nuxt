@@ -5,12 +5,17 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 class ResetPasswordController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function sendResetLink(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -22,6 +27,11 @@ class ResetPasswordController extends Controller
             : response()->json(['email' => __($status)], 422);
     }
 
+    /**
+     * @param Request $request
+     * @param $token
+     * @return JsonResponse
+     */
     public function passwordReset(Request $request, $token)
     {
         $request->validate([

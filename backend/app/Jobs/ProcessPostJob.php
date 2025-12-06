@@ -16,6 +16,11 @@ class ProcessPostJob implements ShouldQueue
     public $action;
     public $data;
 
+    /**
+     * @param string $action
+     * @param $data
+     * @param string $queue
+     */
     public function __construct(string $action, $data, string $queue)
     {
         $this->action = $action;
@@ -25,6 +30,9 @@ class ProcessPostJob implements ShouldQueue
         $this->onQueue($queue);
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         Log::info("🎯 Processing Post Job", [
@@ -43,6 +51,10 @@ class ProcessPostJob implements ShouldQueue
         }
     }
 
+    /**
+     * @param $data
+     * @return void
+     */
     protected function handlePostCreated($data)
     {
         if ($data instanceof Post) {

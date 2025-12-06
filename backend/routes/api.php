@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->name('user.')->group(function () {
     Route::post('/register', [CreateUserController::class, 'register'])->name('register');
     Route::post('/login', [LoginUserController::class, 'login'])->name('login');
+    Route::post('/update', [UpdateUserController::class, 'update'])
+        ->middleware(['auth:sanctum'])
+        ->name('update');
+    Route::post('/logout', [LogoutUserController::class, 'logout'])
+        ->middleware(['auth:sanctum'])
+        ->name('logout');
 
 });
 /*

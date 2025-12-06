@@ -13,13 +13,23 @@ use App\Jobs\ProcessPostJob;
 
 class PostService implements PostInterface
 {
+    /**
+     * @var RabbitMQService
+     */
     protected $rabbitMQService;
 
+    /**
+     * @param RabbitMQService $rabbitMQService
+     */
     public function __construct(RabbitMQService $rabbitMQService)
     {
         $this->rabbitMQService = $rabbitMQService;
     }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     public function store(array $data)
     {
         // пост

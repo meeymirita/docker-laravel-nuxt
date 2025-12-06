@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Image extends Model
 {
     use HasFactory;
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'filename',
         'path',
@@ -19,7 +23,9 @@ class Image extends Model
         'imageable_type'
     ];
 
-    // Полиморфная связь
+    /**
+     * @return MorphTo
+     */
     public function imageable(): MorphTo
     {
         return $this->morphTo();

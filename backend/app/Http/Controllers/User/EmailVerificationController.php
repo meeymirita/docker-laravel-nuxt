@@ -6,10 +6,15 @@ use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\VerifyEmailRequest;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class EmailVerificationController extends Controller
 {
+    /**
+     * @param VerifyEmailRequest $request
+     * @return JsonResponse
+     */
     public function verify(VerifyEmailRequest $request)
     {
         $user = $request->getVerifyUser();

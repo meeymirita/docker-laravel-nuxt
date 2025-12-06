@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserCreateService implements UserCreateInterface
 {
+    /**
+     * @param array $userData
+     * @return array|mixed
+     * @throws \Throwable
+     */
     public function createUser(array $userData)
     {
         return DB::transaction(function () use ($userData) {

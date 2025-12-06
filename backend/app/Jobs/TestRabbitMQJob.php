@@ -15,12 +15,18 @@ class TestRabbitMQJob implements ShouldQueue
 
     public $message;
 
+    /**
+     * @param $message
+     */
     public function __construct($message)
     {
         $this->message = $message;
         $this->onQueue('laravel_queue');
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         Log::info('RabbitMQ Job executed: ' . $this->message);

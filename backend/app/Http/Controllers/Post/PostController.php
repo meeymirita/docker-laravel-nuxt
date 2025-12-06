@@ -9,23 +9,39 @@ use App\Http\Resources\ImageResource;
 use App\Http\Resources\Post\PostResource;
 use App\Http\Resources\Post\UserPostResource;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Collection;
+
 class PostController extends Controller
 {
     public $postService;
+
+    /**
+     * @param PostInterface $postService
+     */
     public function __construct(PostInterface $postService){
         $this->postService = $postService;
     }
 
 
     // Все посты всех пользователей на главную
-    public function index()
+
+    /**
+     * @return AnonymousResourceCollection
+     */
+    public function index() : Collection
     {
         return PostResource::collection(
             Post::query()->latest()->paginate(10)
         );
     }
     // посты авторизиванного пользователя в его профиле
+
+    /**
+     * @return AnonymousResourceCollection
+     */
     public function userPosts()
     {
         return UserPostResource::collection(
@@ -34,6 +50,11 @@ class PostController extends Controller
                 ->paginate(10)
         );
     }
+
+    /**
+     * @param StoreRequest $request
+     * @return JsonResponse
+     */
     public function store(StoreRequest $request)
     {
         $post = $this->postService->store($request->validated());
@@ -44,16 +65,19 @@ class PostController extends Controller
         ], 201);
     }
     // просмотр одного поста
-    public function show(Post $post)
+
+    /**
+     * @param Post $post
+     * @return PostResource
+     */
+    public function show(Post $post): PostResource
     {
         return new PostResource($post);
     }
-
     public function update(Request $request, Post $post)
     {
         //
     }
-
     public function destroy(Post $post)
     {
         //

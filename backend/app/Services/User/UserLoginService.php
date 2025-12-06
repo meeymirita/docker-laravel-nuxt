@@ -8,17 +8,21 @@ use App\Http\Requests\User\LoginUserRequest;
 use Illuminate\Support\Facades\Auth;
 class UserLoginService
 {
+    /**
+     * @param LoginUserRequest $userData
+     * @return array|null
+     */
     public function login(LoginUserRequest $userData)
     {
 
         return $this->auth($this->checkLogin($userData), $userData->login, $userData->password);
     }
-
-    /* string $type, string $login, string $password
-    * $type = email / login
-    * $login -> $userData->login
-    * $password -> $userData->$password
-    */
+    /**
+     * @param string $type
+     * @param string $login
+     * @param string $password
+     * @return array|null
+     */
     public function auth(string $type, string $login, string $password)
     {
 
@@ -38,6 +42,10 @@ class UserLoginService
         return null;
     }
 
+    /**
+     * @param LoginUserRequest $request
+     * @return string
+     */
     public function checkLogin(LoginUserRequest $request)
     {
         return filter_var($request->get('login'), FILTER_VALIDATE_EMAIL)

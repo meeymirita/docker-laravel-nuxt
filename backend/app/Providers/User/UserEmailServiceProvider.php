@@ -25,6 +25,9 @@ class UserEmailServiceProvider extends ServiceProvider
         $this->configureEmailVerification();
     }
 
+    /**
+     * @return void
+     */
     protected function configureEmailVerification(): void
     {
         VerifyEmail::toMailUsing(function ($notifiable) {

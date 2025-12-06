@@ -8,6 +8,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class VerifyEmailRequest extends FormRequest
 {
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         $user = $this->getVerifyUser();
@@ -18,17 +21,17 @@ class VerifyEmailRequest extends FormRequest
         return true;
     }
 
-
-    public function rules(): array
-    {
-        return [];
-    }
-
+    /**
+     * @return User|null
+     */
     public function getVerifyUser(): ?User
     {
         return User::find($this->route('id'));
     }
 
+    /**
+     * @return mixed
+     */
     protected function failedAuthorization()
     {
         throw new AuthorizationException('Неверная ссылка для подтверждения.');

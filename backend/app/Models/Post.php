@@ -12,23 +12,36 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Post extends Model
 {
     use HasFactory;
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'user_id', 'title', 'content', 'likes', 'views'
     ];
 
     // Автор поста
+
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
-    // Комментарии к посту
+    /**
+     * Комментарии к посту
+     * @return HasMany
+     */
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    // Изображения поста (полиморфная связь)
+    /**
+     * Изображения поста (полиморфная связь)
+     * @return MorphMany
+     */
     public function images(): MorphMany
     {
         return $this->morphMany(Image::class, 'imageable');

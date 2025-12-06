@@ -52,12 +52,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-//    public function getEmailForVerification()
-//    {
-//        return $this->email;
-//    }
-
-    // все посты пользователя
+    /**
+     * все посты пользователя
+     * @return HasMany
+     */
     public function posts() : HasMany
     {
         return $this->hasMany(Post::class);

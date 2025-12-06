@@ -16,9 +16,18 @@ use Illuminate\Support\Facades\Log;
 
 class RabbitMQService
 {
+    /**
+     * @var $connection
+     */
     protected $connection;
+    /**
+     * @var $channel
+     */
     protected $channel;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
         // автоподключение при создании
@@ -26,6 +35,11 @@ class RabbitMQService
     }
 
     // подключение
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
     protected function connect()
     {
         try {
@@ -57,11 +71,19 @@ class RabbitMQService
         return $this->publish('post_created', $postData, 'post_created');
     }
 
+    /**
+     * @param array $postData
+     * @return bool
+     */
     public function publishPostUpdated(array $postData)
     {
         return $this->publish('post_updated', $postData, 'post_updated');
     }
 
+    /**
+     * @param array $postData
+     * @return bool
+     */
     public function publishPostDeleted(array $postData)
     {
         return $this->publish('post_deleted', $postData, 'post_deleted');
@@ -96,6 +118,12 @@ class RabbitMQService
     |
     |--------------------------------------------------------------------------
     */
+    /**
+     * @param string $queue
+     * @param array $data
+     * @param string|null $action
+     * @return bool
+     */
     public function publish(string $queue, array $data, string $action = null)
     {
         try {
@@ -125,7 +153,7 @@ class RabbitMQService
     }
 
     /**
-     * Закрытие соединения
+     * Закрытие соединения Автоудаление после вызова
      */
     public function __destruct()
     {

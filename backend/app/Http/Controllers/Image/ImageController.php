@@ -5,10 +5,16 @@ namespace App\Http\Controllers\Image;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ImageController extends Controller
 {
     // линк для фронта
+    /**
+     * @param Image $image
+     * @return BinaryFileResponse
+     */
     public function view(Image $image)
     {
         if (!Storage::disk('public')->exists($image->path)) {
@@ -19,6 +25,11 @@ class ImageController extends Controller
     }
 
     // скачивание
+
+    /**
+     * @param Image $image
+     * @return StreamedResponse
+     */
     public function download(Image $image)
     {
         if (!Storage::disk('public')->exists($image->path)) {
