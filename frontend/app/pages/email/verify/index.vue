@@ -51,7 +51,9 @@ const verifyEmail = async () => {
     if (!id || !hash) {
       throw new Error('Неверная ссылка для подтверждения email')
     }
-    const response = await $fetch(`http://localhost:8080/api/email/verify/${id}/${hash}`, {
+    const prod = 'https://meeymirita.ru/';
+    const local = 'http://localhost:8080/';
+    const response = await $fetch(`${local}api/email/verify/${id}/${hash}`, {
       method: 'GET',
       params: {
         expires,

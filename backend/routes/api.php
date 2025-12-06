@@ -142,3 +142,5 @@ Route::get('/test-mail', function () {
         return 'Ошибка: ' . $e->getMessage();
     }
 });
+// docker-compose -f docker-compose.prod.yml exec laravel bash лара
+// docker-compose -f docker-compose.prod.yml up -d поднять
