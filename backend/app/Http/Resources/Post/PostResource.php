@@ -18,11 +18,11 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user_id   ' => $this->user_id,
-            'title     ' => $this->title,
-            'content   ' => $this->content,
-            'likes     ' => $this->likes,
-            'views     ' => $this->views,
+            'user_id' => $this->user_id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'likes' => $this->likes,
+            'views' => $this->views,
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'date' => [
