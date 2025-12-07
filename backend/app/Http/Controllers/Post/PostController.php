@@ -33,7 +33,7 @@ class PostController extends Controller
     {
         return PostResource::collection(
             Post::query()->with(['images', 'tags'])
-                ->latest()->paginate(20)
+                ->latest()->paginate(2)
         );
     }
 
