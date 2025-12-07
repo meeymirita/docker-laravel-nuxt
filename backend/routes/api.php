@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Image\ImageController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\User\{AccountUserController,
     CreateUserController,
@@ -157,3 +158,4 @@ Route::get('/test-mail', function () {
 });
 // docker-compose -f docker-compose.prod.yml exec laravel bash лара
 // docker-compose -f docker-compose.prod.yml up -d поднять
+Route::get('/test-limit', [TestController::class, 'testLimit']);
