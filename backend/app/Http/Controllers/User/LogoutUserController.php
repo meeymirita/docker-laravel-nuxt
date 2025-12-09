@@ -15,7 +15,7 @@ class LogoutUserController
         // удаление всех токенов пользователя
         $request->user()->tokens()->delete();
         return response()->json([
-            'status' => 'success'
+            'status' => 'Вы вышли из аккаунта'
         ]);
     }
 }

@@ -29,9 +29,7 @@ class UserLoginService
         if (Auth::attempt([$type => $login, 'password' => $password])){
             $user = Auth::user();
             $token = $user->createToken(
-                'login_token',
-                ['*'],
-                now()->addWeek()
+                'login_token',['user'],now()->addWeek()
             )->plainTextToken;
 
             return [

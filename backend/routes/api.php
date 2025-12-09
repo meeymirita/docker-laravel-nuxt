@@ -27,9 +27,12 @@ Route::prefix('user')->name('user.')->group(callback: function () {
     Route::get('/profile', action: [AccountUserController::class, 'profile'])
         ->middleware(['auth:sanctum'])
         ->name('profile');
-    // обновление данных пользователя ТОЛЬКО ИНФОРМАЦИЯ О НЁМ СДЕЛАТЬ ТУТ
+    // роут на страницу пользователя по нику +-
+//    Route::get('/{login}', action: [AccountUserController::class, 'profile'])
+//        ->name('user-account');
+    // обновление данных пользователя
     Route::post('/update', action: [UpdateUserController::class, 'update'])
-        ->middleware(['auth:sanctum'])
+        ->middleware(['auth:sanctum', 'can:update,user']) // 'user' === auth()->user()
         ->name('update');
     // выход из аккаунта
     Route::post('/logout', action: [LogoutUserController::class, 'logout'])
@@ -57,8 +60,7 @@ Route::post('/reset-password/{token}', [ResetPasswordController::class, 'passwor
     ->name('password.reset');
 
 Route::prefix('posts')
-    ->name('posts.')
-    ->group(function () {
+    ->name('posts.')->group(function () {
     // все посты на главную
     Route::get('/', [PostController::class, 'index'])->name('index');
     // посмотреть пост
@@ -149,7 +151,6 @@ Route::get('/test-mail', function () {
         \Mail::raw('Тестовое письмо из Laravel', function ($message) {
             $email = 'nik.lyamkin@yandex.ru';
             // Attachment::fromPath из доки https://laravel.com/docs/12.x/mail
-            // это вообще без понятия как работает storage_path('app/public/me.jpg')
             $attachment = Attachment::fromPath(storage_path('app/public/me.jpg'));
             // к меседжу
             $message->attach($attachment);
