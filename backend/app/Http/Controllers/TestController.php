@@ -73,7 +73,7 @@ class TestController
             if ($offset >= $totalPosts) {
                 echo "<br>";
                 echo "\n✓ Достигнут конец! Все посты загружены.\n";
-                break; // ВЫХОД ИЗ ЦИКЛА!
+                break; 
             }
 
             $page++;
