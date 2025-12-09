@@ -11,6 +11,7 @@ use App\Http\Controllers\User\{AccountUserController,
     ResetPasswordController,
     UpdateUserController};
 use App\Http\Resources\User\UserResource;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Support\Facades\Route;
 
 //premain
@@ -147,6 +148,12 @@ Route::get('/test-mail', function () {
     try {
         \Mail::raw('Тестовое письмо из Laravel', function ($message) {
             $email = 'nik.lyamkin@yandex.ru';
+            // Attachment::fromPath из доки https://laravel.com/docs/12.x/mail
+            // это вообще без понятия как работает storage_path('app/public/me.jpg')
+            $attachment = Attachment::fromPath(storage_path('app/public/me.jpg'));
+            // к меседжу
+            $message->attach($attachment);
+
             $message->to($email)
                 ->subject('Тест отправки почты');
         });
