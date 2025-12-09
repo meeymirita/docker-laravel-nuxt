@@ -150,7 +150,7 @@ Route::get('/test-mail', function () {
             $email = 'nik.lyamkin@yandex.ru';
             // Attachment::fromPath из доки https://laravel.com/docs/12.x/mail
             // это вообще без понятия как работает storage_path('app/public/me.jpg')
-            $attachment = Attachment::fromPath(storage_path('app/public/me.jpg'));
+            $attachment = Attachment::fromPath(storage_path('me.jpg'));
             // к меседжу
             $message->attach($attachment);
 
