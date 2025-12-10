@@ -6,39 +6,43 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Resources\User\LoginResponseResource;
 use App\Services\User\UserLoginService;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class LoginUserController extends Controller
 {
-    public $userLoginService;
+    public function __construct(
+        private readonly UserLoginService $userLoginService
+    ) {}
 
     /**
-     * @param UserLoginService $userLoginService
+     * Авторизация пользователя
      */
-    public function __construct(UserLoginService $userLoginService)
-    {
-        $this->userLoginService = $userLoginService;
-    }
-
-    /**
-     * @param LoginUserRequest $request
-     * @return LoginResponseResource|JsonResponse
-     */
-    public function login(LoginUserRequest $request)
+    public function login(Request $request): JsonResponse
     {
         try {
-            $data = $this->userLoginService->login($request);
-            if (!$data) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Пароль или логин не верный'
-                ], 401);
-            }
-            return new LoginResponseResource($data);
-        } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            $data = $this->userLoginService->login($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Авторизация успешна',
+                'data' => new LoginResponseResource($data)
+            ], 200);
+
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибки валидации',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка сервера',
+                'error' => $e->getMessage() ?: null
+            ], 500);
         }
     }
-
-
 }

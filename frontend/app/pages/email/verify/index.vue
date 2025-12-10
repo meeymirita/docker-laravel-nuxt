@@ -1,35 +1,3 @@
-<template>
-  <div class="verify-email-page">
-    <div class="container">
-      <div v-if="loading" class="loading">
-        <p>Проверка email...</p>
-        <div class="spinner"></div>
-      </div>
-
-      <div v-else-if="success" class="success">
-        <h1>✅ Email успешно подтверждён!</h1>
-        <p>{{ message }}</p>
-        <button @click="redirectToLogin" class="btn-primary">
-          Войти в аккаунт
-        </button>
-      </div>
-
-      <div v-else class="error">
-        <h1>❌ Ошибка подтверждения email</h1>
-        <p>{{ errorMessage }}</p>
-        <div class="actions">
-          <button @click="retryVerification" class="btn-secondary">
-            Попробовать снова
-          </button>
-          <button @click="redirectToHome" class="btn-link">
-            На главную
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from '#app'
@@ -95,6 +63,37 @@ onMounted(() => {
   verifyEmail()
 })
 </script>
+<template>
+  <div class="verify-email-page">
+    <div class="container">
+      <div v-if="loading" class="loading">
+        <p>Проверка email...</p>
+        <div class="spinner"></div>
+      </div>
+
+      <div v-else-if="success" class="success">
+        <h1>✅ Email успешно подтверждён!</h1>
+        <p>{{ message }}</p>
+        <button @click="redirectToLogin" class="btn-primary">
+          Войти в аккаунт
+        </button>
+      </div>
+
+      <div v-else class="error">
+        <h1>❌ Ошибка подтверждения email</h1>
+        <p>{{ errorMessage }}</p>
+        <div class="actions">
+          <button @click="retryVerification" class="btn-secondary">
+            Попробовать снова
+          </button>
+          <button @click="redirectToHome" class="btn-link">
+            На главную
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .verify-email-page {

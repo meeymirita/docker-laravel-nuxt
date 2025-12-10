@@ -11,6 +11,12 @@
             <li>
               <NuxtLink to="/" >Главная</NuxtLink>
             </li>
+            <li>
+              <NuxtLink to="/user/login" >log</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/user/register" >reg</NuxtLink>
+            </li>
           </ul>
         </nav>
       </div>
