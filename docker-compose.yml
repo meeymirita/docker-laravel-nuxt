@@ -87,7 +87,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      REDIS_HOST:  ${REDIS_HOST:-redis}
+      REDIS_HOST: ${REDIS_HOST:-redis}
       REDIS_PASSWORD: ${REDIS_PASSWORD:-secret}
       REDIS_PORT: ${REDIS_PORT:-6379}
       RABBITMQ_HOST: ${RABBITMQ_HOST:-rabbitmq}
@@ -95,6 +95,14 @@ services:
       RABBITMQ_USER: ${RABBITMQ_USER:-admin}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-secret}
       RABBITMQ_VHOST: /
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      MAIL_USERNAME: ""
+      MAIL_PASSWORD: ""
+      MAIL_ENCRYPTION: null
+      MAIL_FROM_ADDRESS: noreply@meeymirita.ru
+      MAIL_FROM_NAME: "meeymirita"
     volumes:
       - ./backend:/var/www/html
     restart: always
@@ -107,6 +115,8 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      mailpit:
+        condition: service_started
     healthcheck:
       test: [ "CMD", "php", "artisan", "env" ]
       interval: 30s
@@ -141,12 +151,32 @@ services:
       - ldocker
     command: sh -c "npm install && npm run dev"
 
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - ldocker
+    volumes:
+      - mailpit_data:/data
+    environment:
+      MP_DATABASE: /data/mailpit.db
+      MP_MAX_MESSAGES: 5000
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1  # ← ДОБАВЬ ЭТУ СТРОКУ!
+      TZ: Europe/Moscow
+
 volumes:
   mysql_data:
     driver: local
   redis_data:
     driver: local
   rabbitmq_data:
+    driver: local
+  mailpit_data:
     driver: local
 
 networks:

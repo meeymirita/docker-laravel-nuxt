@@ -162,3 +162,10 @@ Route::get('/test-mail', function () {
 // docker-compose -f docker-compose.prod.yml exec laravel bash лара
 // docker-compose -f docker-compose.prod.yml up -d поднять
 Route::get('/test-limit', [TestController::class, 'testLimit']);
+
+
+//mysql
+//  docker-compose -f docker-compose.prod.yml exec mysql bash
+// mysql -u root -p / password
+// mysql> use laravel
+// mysql> DELETE FROM users WHERE email = 'nik.lyamkin@yandex.ru';
