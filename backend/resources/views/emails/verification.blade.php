@@ -53,7 +53,7 @@
         }
 
         .code-container {
-            background-image: url('https://i.pinimg.com/736x/d7/12/e8/d712e82c87d68894113dd169629627e2.jpg');
+            /* УДАЛИ background-image ОТСЮДА */
             padding: 30px;
             text-align: center;
             margin: 30px 0;
@@ -77,7 +77,6 @@
         }
 
         .himary {
-            background-image: url('https://i.ytimg.com/vi/5mS_DYRmOac/maxresdefault.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -123,9 +122,9 @@
         Чтобы продолжить регистрацию учётной записи, используйте следующий код подтверждения.
     </p>
 
-    <div class="code-container">
-        <h1 style="color: #ffffff; letter-spacing: 5px; margin: 0;" class="verification-code">{{ $code }}</h1>
-        <p class="expiry">Код действителен 30 минут</p>
+    <div class="code-container" style="background-image: url('{{ $sakura_url }}');">
+        <h1 style="color: #ffffff; letter-spacing: 5px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);" class="verification-code">{{ $code }}</h1>
+        <p class="expiry" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Код действителен 30 минут</p>
     </div>
 
     <h2 class="subject">Начало прекрасной истории 📖</h2>
@@ -135,15 +134,14 @@
             где начинаются настоящие связи.</p>
     </div>
     <p class="instruction">Теперь это мы с тобой! 👉👈</p>
-    <div class="himary">
 
-    </div>
+    <div class="himary" style="background-image: url('{{ $himary_url }}');"></div>
 
     <div class="footer">
         <p class="signature">С уважением,</p>
         <p>
             <strong>
-                <a style="font-size: 22px;  color: #ff6f6f; letter-spacing: 5px; margin: 0; text-decoration: none;"
+                <a style="font-size: 22px; color: #ff6f6f; letter-spacing: 5px; margin: 0; text-decoration: none;"
                    href="{{ $frontend_url }}">
                     meeymirita
                 </a>

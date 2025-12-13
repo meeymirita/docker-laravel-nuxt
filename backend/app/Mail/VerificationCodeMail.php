@@ -37,12 +37,17 @@ class VerificationCodeMail extends Mailable
      */
     public function content(): Content
     {
+        // http://localhost:8080/storage/images/himary.jpg
+        // http://localhost:8080/storage/images/sakura.jpg
+//        \Log::info(url('storage/images/himary.jpg'));
         return new Content(
             view: 'emails.verification',
             with: [
                 'user' => $this->user,
                 'code' => $this->code,
-                'frontend_url' => 'https://meeymirita.ru/'
+                'frontend_url' => 'https://meeymirita.ru/',
+                'himary_url' => url('storage/images/himary.jpg'),
+                'sakura_url' => url('storage/images/sakura.jpg'),
             ]
         );
     }

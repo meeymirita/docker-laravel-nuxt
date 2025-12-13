@@ -82,10 +82,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
 // тест
-Route::get('/test-image',function (){
-    return response()->json([
-        'success' => storage_path('himary.jpg'),
-    ]);
+Route::get('/check-image-path', function () {
+    $paths = [
+        'storage_path' => storage_path('app/public/imagesToEmails/registerImage/himary.jpg'),
+        'public_storage' => public_path('storage/imagesToEmails/registerImage/himary.jpg'),
+        'exists_storage' => file_exists(storage_path('app/public/imagesToEmails/registerImage/himary.jpg')),
+        'exists_public' => file_exists(public_path('storage/imagesToEmails/registerImage/himary.jpg')),
+    ];
+
+    return response()->json($paths);
 });
 Route::get('/test-rabbitmq', function () {
     \App\Jobs\TestRabbitMQJob::dispatch('Hello RabbitMQ!');
