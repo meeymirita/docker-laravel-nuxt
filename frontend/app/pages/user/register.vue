@@ -1,33 +1,10 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <div class="container">
     <form class="form">
       <h2 class="form-title">Регистрация</h2>
+
       <div class="input-group">
-        <label for="name" class="input-label">Логин</label>
-        <input
-            type="text"
-            id="name"
-            name="name"
-            class="input-field"
-            placeholder="Введите name"
-        >
-      </div>
-      <div class="input-group">
-        <label for="login" class="input-label">Логин</label>
-        <input
-            type="text"
-            id="login"
-            name="login"
-            class="input-field"
-            placeholder="Введите логин"
-        >
-      </div>
-      <div class="input-group">
-        <label for="email" class="input-label">Логин</label>
+        <label for="email" class="input-label">Электронная почта</label>
         <input
             type="text"
             id="email"
@@ -36,6 +13,22 @@
             placeholder="Введите email"
         >
       </div>
+
+      <!-- Поле для кода подтверждения -->
+      <div class="input-group">
+        <label for="confirmationCode" class="input-label">Код подтверждения</label>
+        <div class="confirmation-input-group">
+          <input
+              type="text"
+              id="confirmationCode"
+              name="confirmationCode"
+              class="input-field confirmation-field"
+              placeholder="Введите код"
+          >
+          <button type="button" class="send-code-button">Отправить</button>
+        </div>
+      </div>
+
       <div class="input-group">
         <label for="password" class="input-label">Пароль</label>
         <input
@@ -47,23 +40,23 @@
         >
       </div>
       <div class="input-group">
-        <label for="password" class="input-label">Подтверждение пароля</label>
+        <label for="confirmPassword" class="input-label">Подтверждение пароля</label>
         <input
             type="password"
-            id="password"
-            name="password"
+            id="confirmPassword"
+            name="confirmPassword"
             class="input-field"
             placeholder="Введите пароль"
         >
       </div>
 
       <button type="submit" class="submit-button">
-        Войти
+        Зарегистрироваться
       </button>
 
       <div class="form-footer">
-        <NuxtLink class="link" to="/user/login" >Вход</NuxtLink>
-        <NuxtLink class="link" to="/user/send-reset-link" >Забыли пароль?</NuxtLink>
+        <NuxtLink class="link" to="/user/login">Вход</NuxtLink>
+        <NuxtLink class="link" to="/user/send-reset-link">Забыли пароль?</NuxtLink>
       </div>
     </form>
   </div>
@@ -142,6 +135,40 @@
   }
 }
 
+/* Стили для группы подтверждения */
+.confirmation-input-group {
+  display: flex;
+  gap: 12px;
+}
+
+.confirmation-field {
+  flex: 1;
+}
+
+.send-code-button {
+  padding: 14px 24px;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 120px;
+
+  &:hover {
+    background: #ff6f6f;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
 .submit-button {
   width: 100%;
   padding: 16px;
@@ -213,6 +240,16 @@
   .form-title {
     font-size: 24px;
     margin-bottom: 28px;
+  }
+
+  .confirmation-input-group {
+    flex-direction: column;
+  }
+
+  .send-code-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
   }
 
   .form-footer {

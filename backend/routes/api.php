@@ -3,64 +3,51 @@
 use App\Http\Controllers\Image\ImageController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Post\PostController;
-use App\Http\Controllers\User\{AccountUserController,
-    CreateUserController,
-    EmailVerificationController,
-    LoginUserController,
-    LogoutUserController,
-    ResetPasswordController,
-    UpdateUserController};
+use App\Http\Controllers\User\SendVerificationCodeController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\VerifyEmailController;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Support\Facades\Route;
-
-//premain
 //  без защиты
 Route::prefix('user')->name('user.')->group(callback: function () {
     //ругистрация с отправкой письма на почту для подтверждения её
-    Route::post( '/register', action: [CreateUserController::class, 'register'])->name('register');
+    Route::post( '/register', action: [UserController::class, 'register'])->name('register');
+    // Подтверждение email
+    Route::post('/verify-email', [VerifyEmailController::class, 'verify']);
+    Route::post('/send-verification-code', [SendVerificationCodeController::class, 'sendCode']);
+    Route::post('/resend-verification-code', [SendVerificationCodeController::class, 'resendCode']);
     // вход в аккаунт
-    Route::post('/login', action: [LoginUserController::class, 'login'])->name('login');
-    /*
-     * Отдаёт текущего пользователя с его постами пагинация на 10 постов
-     */
-    Route::get('/profile', action: [AccountUserController::class, 'profile'])
-        ->middleware(['auth:sanctum'])
-        ->name('profile');
-    // роут на страницу пользователя по нику +-
-//    Route::get('/{login}', action: [AccountUserController::class, 'profile'])
-//        ->name('user-account');
-    // обновление данных пользователя
-    Route::post('/update', action: [UpdateUserController::class, 'update'])
-        ->middleware(['auth:sanctum', 'can:update,user']) // 'user' === auth()->user()
-        ->name('update');
-    // выход из аккаунта
-    Route::post('/logout', action: [LogoutUserController::class, 'logout'])
-        ->middleware(['auth:sanctum'])
-        ->name('logout');
+//    Route::post('/login', action: [UserController::class, 'login'])->name('login');
 
+//    /*
+//     * Отдаёт текущего пользователя с его постами пагинация на 10 постов
+//     */
+//    Route::get('/profile', action: [AccountUserController::class, 'profile'])
+//        ->middleware(['auth:sanctum'])
+//        ->name('profile');
+//    // роут на страницу пользователя по нику +-
+////    Route::get('/{login}', action: [AccountUserController::class, 'profile'])
+////        ->name('user-account');
+//    // обновление данных пользователя
+//    Route::post('/update', action: [UpdateUserController::class, 'update'])
+//        ->middleware(['auth:sanctum', 'can:update,user']) // 'user' === auth()->user()
+//        ->name('update');
+//    // выход из аккаунта
+//    Route::post('/logout', action: [LogoutUserController::class, 'logout'])
+//        ->middleware(['auth:sanctum'])
+//        ->name('logout');
+//
+//    Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+//        ->middleware('signed')
+//        ->name('verification.verify');
+//    Route::post('/send-reset-link', [ResetPasswordController::class, 'sendResetLink'])
+//        ->name('sendResetLink');
+//    Route::post('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
+//        ->name('password.reset');
 });
-/*
- *   подтверждение емаил и сбросами парооля тоже относится к роутам
- *      verification.verify . sendResetLink . password.reset
- *      если положить внутрь группы юзер то роут нейм будет user.verification.verify и если в AppServiceProvider.php поменять роут тоже
- *      не будет работать видит по дефолту только verification.verify
- *
- *      такая ошибка
- *          [2025-11-03 10:36:00] local.ERROR:
- *          Error firing Registered event
- *          {"error":"Route [verification.verify] not defined.","user_id":6}
-*/
-Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-    ->middleware('signed')
-    ->name('verification.verify');
-Route::post('/send-reset-link', [ResetPasswordController::class, 'sendResetLink'])
-    ->name('sendResetLink');
-Route::post('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
-    ->name('password.reset');
 
-Route::prefix('posts')
-    ->name('posts.')->group(function () {
+Route::prefix('posts')->name('posts.')->group(function () {
     // все посты на главную
     Route::get('/', [PostController::class, 'index'])->name('index');
     // посмотреть пост
@@ -75,8 +62,6 @@ Route::prefix('posts')
     Route::get('/images/{image}/view', [ImageController::class, 'view'])->name('images.view');
     Route::get('/images/{image}/download', [ImageController::class, 'download'])->name('images.download');
 });
-
-
 Route::get('/check', function () {
     return response()->json([
         'authenticated' => Auth::check(),

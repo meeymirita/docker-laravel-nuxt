@@ -13,30 +13,28 @@ use Illuminate\Support\Facades\Hash;
 
 class UserCreateService implements UserCreateInterface
 {
+
+    public function __construct(
+        private VerificationService $verificationService
+    ) {}
+
     /**
      * @param array $userData
      * @return array|mixed
      * @throws \Throwable
      */
-    public function createUser(array $userData)
+    public function createUser(array $userData): mixed
     {
         return DB::transaction(function () use ($userData) {
-            $user = User::create([
-                'name' => $userData['name'],
-                'login' => $userData['login'],
+            $user = User::query()->create([
                 'email' => $userData['email'],
                 'type' => UserType::User->value,
-                'status' => UserStatus::Pending->value,
+                'status' => UserStatus::Pending->value, // Не подтвержден
                 'password' => Hash::make($userData['password']),
             ]);
-//            $token = $user->createToken(
-//                'register_token',
-//                ['*'],
-//                now()->addWeek()
-//            )->plainTextToken;
-
             try {
-                event(new Registered($user));
+                // Отправляем код подтверждения
+                $this->verificationService->sendVerificationCode($user);
             } catch (\Exception $e) {
                 \Log::error('e', [
                     'error' => $e->getMessage(),
@@ -46,8 +44,8 @@ class UserCreateService implements UserCreateInterface
 
             return [
                 'user' => $user,
-//                'token' => $token,
             ];
         });
     }
+
 }

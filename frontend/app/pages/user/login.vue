@@ -1,39 +1,59 @@
-<script setup lang="ts">
-
+<script setup>
 import {ref} from "vue";
 
-const login = ref();
-const password = ref();
+const login = ref('');
+const password = ref('');
 const errorMessage = ref('');
+const validationErrors = ref({});
+
 const loginEvent = async () => {
+  // Сброс предыдущих ошибок
+  errorMessage.value = '';
+  validationErrors.value = {};
+
   if (!login.value || !password.value) {
     errorMessage.value = 'Заполните все поля';
     return;
   }
+
   const prod = 'https://meeymirita.ru/';
   const local = 'http://localhost:8080/';
-
-  console.log('Login:', login.value);
-  console.log('Password:', password.value);
 
   const formData = new FormData();
   formData.append('login', login.value);
   formData.append('password', password.value);
+
   try {
     const response = await $fetch(`${local}api/user/login`, {
       method: 'POST',
       body: formData,
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    // Если здесь, значит запрос успешен (статус 200-299)
+    console.log('Успех:', response);
 
-    const result = await response.json();
-    console.log('Успех:', result);
+    // navigateTo('/dashboard');
+
   } catch (error) {
-    console.log(error)
-    errorMessage.value = error.message
+    console.log('Полная ошибка:', error);
+
+    if (error.data) {
+      const errorData = error.data;
+
+      if (errorData.errors) {
+        validationErrors.value = errorData.errors;
+        const firstError = Object.values(errorData.errors)[0]?.[0];
+        if (firstError) {
+          errorMessage.value = firstError;
+        } else {
+          errorMessage.value = errorData.message || 'Ошибка валидации';
+        }
+      } else {
+        errorMessage.value = errorData.message || 'Неизвестная ошибка';
+      }
+    } else {
+      errorMessage.value = error.message || 'Ошибка сети или сервера';
+    }
   }
 }
 </script>
@@ -50,30 +70,44 @@ const loginEvent = async () => {
             id="login"
             v-model="login"
             class="input-field"
+            :class="{ 'input-error': validationErrors.login }"
             placeholder="Введите логин или почту"
         >
+        <div v-if="validationErrors.login" class="error-list">
+          <div v-for="error in validationErrors.login" :key="error" class="error-item">
+            {{ error }}
+          </div>
+        </div>
       </div>
 
       <div class="input-group">
         <label for="password" class="input-label">Пароль</label>
         <input
-            type="text"
+            type="password"
             id="password"
             v-model="password"
             class="input-field"
+            :class="{ 'input-error': validationErrors.password }"
             placeholder="Введите пароль"
         >
+        <div v-if="validationErrors.password" class="error-list">
+          <div v-for="error in validationErrors.password" :key="error" class="error-item">
+            {{ error }}
+          </div>
+        </div>
       </div>
-      <div v-if="errorMessage">
-        <label class="errorMessage" >{{errorMessage}}</label>
+
+      <div v-if="errorMessage && !validationErrors.password && !validationErrors.login" class="error-message">
+        {{ errorMessage }}
       </div>
+
       <button @click.prevent="loginEvent()" class="submit-button">
         Войти
       </button>
 
       <div class="form-footer">
-        <NuxtLink class="link" to="/user/register" >Регистрация</NuxtLink>
-        <NuxtLink class="link" to="/user/send-reset-link" >Забыли пароль?</NuxtLink>
+        <NuxtLink class="link" to="/user/register">Регистрация</NuxtLink>
+        <NuxtLink class="link" to="/user/send-reset-link">Забыли пароль?</NuxtLink>
       </div>
     </form>
   </div>
@@ -94,15 +128,13 @@ const loginEvent = async () => {
   padding: 40px;
   width: 100%;
   max-width: 620px;
-  box-shadow:
-      0 15px 35px rgba(50, 50, 93, 0.1),
-      0 5px 15px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1),
+  0 5px 15px rgba(0, 0, 0, 0.07);
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow:
-        0 18px 40px rgba(50, 50, 93, 0.15),
-        0 8px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 18px 40px rgba(50, 50, 93, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
   }
 }
@@ -198,15 +230,35 @@ const loginEvent = async () => {
     text-decoration: underline;
   }
 }
-.errorMessage{
-  display: block;
-  color: #ff9191;
+
+.input-field.input-error {
+  border-color: #ff6f6f;
+  background: #fff8f8;
+}
+
+.error-list {
+  margin-top: 4px;
+}
+
+.error-item {
+  color: #ff6f6f;
   font-size: 14px;
   font-weight: 500;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  padding: 2px 0;
 }
+
+.error-message {
+  color: #ff6f6f;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  background: #fff8f8;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -239,4 +291,5 @@ const loginEvent = async () => {
     text-align: center;
   }
 }
+
 </style>

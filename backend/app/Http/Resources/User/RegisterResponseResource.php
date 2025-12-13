@@ -15,9 +15,9 @@ class RegisterResponseResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'message'   => 'Вы успешно зарегистрировались! Проверьте вашу почту и подтвердите email.',
-            'user'      => new UserResource($this->resource['user']),
-//            'token'     => $this->resource['token'],
+            'success' => true,
+            'user'=> new UserResource($this->resource['user']),
+            'requires_verification' => true,
         ];
     }
 

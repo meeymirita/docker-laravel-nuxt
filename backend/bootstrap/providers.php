@@ -2,6 +2,5 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    \App\Providers\User\AuthServiceProvider::class,
-    App\Providers\User\UserEmailServiceProvider::class,
+    \App\Providers\User\UserServiceProvider::class,
 ];

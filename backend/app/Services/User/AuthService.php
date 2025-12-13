@@ -2,16 +2,21 @@
 
 namespace App\Services\User;
 
+
+use App\Contracts\UserCreateInterface;
 use App\Enums\UserCheckLoginField;
+use App\Enums\UserStatus;
+use App\Enums\UserType;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class UserLoginService
+class AuthService
 {
-
     /**
      * @param array $credentials
      * @return array
@@ -112,4 +117,6 @@ class UserLoginService
             'expires_at' => now()->addWeek()->toISOString(),
         ];
     }
+
+
 }

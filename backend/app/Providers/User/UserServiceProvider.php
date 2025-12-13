@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Policies\AccountUserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+class UserServiceProvider extends ServiceProvider
 {
     /**
      * The model to policy mappings for the application.
