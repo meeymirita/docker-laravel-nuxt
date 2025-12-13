@@ -81,11 +81,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 
+// тест
+Route::get('/test-image',function (){
+    return response()->json([
+        'success' => storage_path('himary.jpg'),
+    ]);
+});
 Route::get('/test-rabbitmq', function () {
     \App\Jobs\TestRabbitMQJob::dispatch('Hello RabbitMQ!');
     return response()->json(['message' => 'Job dispatched to RabbitMQ']);
 });
-// тест
 Route::get('/test-queue', function () {
     $post = \App\Models\Post::first();
 
