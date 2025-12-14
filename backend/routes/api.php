@@ -46,7 +46,7 @@ Route::prefix('user')->name('user.')->group(callback: function () {
 //    Route::post('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
 //        ->name('password.reset');
 });
-
+// 123
 Route::prefix('posts')->name('posts.')->group(function () {
     // все посты на главную
     Route::get('/', [PostController::class, 'index'])->name('index');
