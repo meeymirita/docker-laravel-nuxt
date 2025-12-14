@@ -145,6 +145,7 @@ Route::get('/test-mail', function () {
     try {
         \Mail::raw('Тестовое письмо из Laravel', function ($message) {
             $email = 'nik.lyamkin@yandex.ru';
+            //роверил в сообщения так ставить storage_path('app/public/me.jpg')
             // Attachment::fromPath из доки https://laravel.com/docs/12.x/mail
             $attachment = Attachment::fromPath(storage_path('app/public/me.jpg'));
             // к меседжу
