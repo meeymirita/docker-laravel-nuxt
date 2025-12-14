@@ -1,21 +1,119 @@
+<script setup>
+import { ref } from 'vue'
+
+const email = ref('')
+const password = ref('')
+const password_confirmation = ref('')
+const errorMessage = ref('')
+const validationErrors = ref({})
+const registerForm = ref(true)
+const confirmationCodeShow = ref(false)
+const loading = ref(false)
+
+const register = async () => {
+  const local = 'http://localhost:8080/'
+
+  // Сброс ошибок
+  errorMessage.value = ''
+  validationErrors.value = {}
+  loading.value = true
+
+
+
+  const formData = new FormData()
+  formData.append('email', email.value)
+  formData.append('password', password.value)
+  formData.append('password_confirmation', password_confirmation.value)
+
+  try {
+    const response = await $fetch(`${local}api/user/register`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    // Если здесь, значит запрос успешен (статус 200-299)
+    console.log('Успех:', response);
+
+    // navigateTo('/dashboard');
+
+  } catch (error) {
+    console.log('Полная ошибка:', error);
+
+    if (error.data) {
+      const errorData = error.data;
+
+      if (errorData.errors) {
+        validationErrors.value = errorData.errors;
+        const firstError = Object.values(errorData.errors)[0]?.[0];
+        if (firstError) {
+          errorMessage.value = firstError;
+        } else {
+          errorMessage.value = errorData.message || 'Ошибка валидации';
+        }
+      } else {
+        errorMessage.value = errorData.message || 'Неизвестная ошибка';
+      }
+    } else {
+      errorMessage.value = error.message || 'Ошибка сети или сервера';
+    }
+  }
+}
+</script>
 <template>
   <div class="container">
     <form class="form">
       <h2 class="form-title">Регистрация</h2>
+      <div v-if="registerForm">
+        <div class="input-group">
+          <label for="email" class="input-label">Электронная почта</label>
+          <input
+              type="text"
+              id="email"
+              v-model="email"
+              class="input-field"
+              :class="{ 'error': validationErrors.email }"
+              placeholder="Введите email"
+          >
+          <div v-if="validationErrors.email" class="validation-error">
+            {{ validationErrors.email[0] }}
+          </div>
+        </div>
 
-      <div class="input-group">
-        <label for="email" class="input-label">Электронная почта</label>
-        <input
-            type="text"
-            id="email"
-            name="email"
-            class="input-field"
-            placeholder="Введите email"
-        >
+        <div class="input-group">
+          <label for="password" class="input-label">Пароль</label>
+          <input
+              type="password"
+              id="password"
+              v-model="password"
+              class="input-field"
+              :class="{ 'error': validationErrors.password }"
+              placeholder="Введите пароль"
+          >
+          <div v-if="validationErrors.password" class="validation-error">
+            {{ validationErrors.password[0] }}
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="confirmPassword" class="input-label">Подтверждение пароля</label>
+          <input
+              type="password"
+              id="password_confirmation"
+              v-model="password_confirmation"
+              class="input-field"
+              :class="{ 'error': validationErrors.password_confirmation }"
+              placeholder="Подтверждение пароля"
+          >
+
+        </div>
+        <div v-if="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        <button @click.prevent="register" class="submit-button">
+          Зарегистрироваться
+        </button>
       </div>
 
-      <!-- Поле для кода подтверждения -->
-      <div class="input-group">
+      <div v-if="confirmationCodeShow" style="margin-top: 30px" class="input-group">
         <label for="confirmationCode" class="input-label">Код подтверждения</label>
         <div class="confirmation-input-group">
           <input
@@ -28,31 +126,6 @@
           <button type="button" class="send-code-button">Отправить</button>
         </div>
       </div>
-
-      <div class="input-group">
-        <label for="password" class="input-label">Пароль</label>
-        <input
-            type="password"
-            id="password"
-            name="password"
-            class="input-field"
-            placeholder="Введите пароль"
-        >
-      </div>
-      <div class="input-group">
-        <label for="confirmPassword" class="input-label">Подтверждение пароля</label>
-        <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            class="input-field"
-            placeholder="Введите пароль"
-        >
-      </div>
-
-      <button type="submit" class="submit-button">
-        Зарегистрироваться
-      </button>
 
       <div class="form-footer">
         <NuxtLink class="link" to="/user/login">Вход</NuxtLink>
@@ -135,7 +208,6 @@
   }
 }
 
-/* Стили для группы подтверждения */
 .confirmation-input-group {
   display: flex;
   gap: 12px;
@@ -256,6 +328,50 @@
     flex-direction: column;
     gap: 12px;
     text-align: center;
+  }
+}
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #fcc;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.validation-error {
+  color: #e53e3e;
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 500;
+  padding-left: 4px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Добавьте красную рамку для полей с ошибками */
+.input-field.error {
+  border-color: #e53e3e;
+  background-color: #fff5f5;
+
+  &:focus {
+    border-color: #c53030;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+  }
+}
+
+/* Анимация для плавного появления ошибок */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

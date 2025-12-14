@@ -26,8 +26,11 @@ class SendVerificationCodeController extends Controller
             'email' => 'required|email|exists:users,email',
         ]);
 
-        $user = User::query()->where('email', $request->get('email'))->first();
-
+//        $user = User::query()->where('email', $request->get('email'))->first();
+        $user = User::query()->create([
+            'email' => $request->get('email'),
+        ]);
+        \Log::info($user);
         if ($user->hasVerifiedEmail()) {
             return response()->json([
                 'success' => false,

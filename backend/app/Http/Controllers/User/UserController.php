@@ -6,12 +6,13 @@ use App\Contracts\UserCreateInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Resources\User\RegisterResponseResource;
+use App\Models\User;
 
 class UserController extends Controller
 {
     public UserCreateInterface $userCreate;
 
-    public function __construct( UserCreateInterface $userCreate)
+    public function __construct(UserCreateInterface $userCreate)
     {
         $this->userCreate = $userCreate;
     }
