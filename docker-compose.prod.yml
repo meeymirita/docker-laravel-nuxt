@@ -71,7 +71,7 @@ services:
       - ldocker
     depends_on:
       - laravel
-      - nuxtjs
+      - vuejs
 
   laravel:
     build:
@@ -125,17 +125,22 @@ services:
   #   networks:
   #     - ldocker
 
-  nuxtjs:
-    image: docker.io/node:24.10.0
-    container_name: nuxtjs_prod
+  vuejs:
+    image: docker.io/node:25-alpine
+    container_name: vue-app
     restart: unless-stopped
     working_dir: /app
+    ports:
+      - "5173:5173"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     networks:
       - ldocker
-    command: sh -c "npm install && npm run build && node .output/server/index.mjs"
-
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      - VITE_API_URL=https://meeymirita.ru/api
+      - CHOKIDAR_USEPOLLING=true
 volumes:
   mysql_prod_data:
     driver: local
