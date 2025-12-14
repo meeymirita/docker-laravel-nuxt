@@ -21,14 +21,6 @@ export default defineConfig({
     strictPort: true,  // Не менять порт если занят
     watch: {
       usePolling: true  // Для hot reload в Docker
-    },
-    hmr: process.env.NODE_ENV === 'production' ? {
-      host: 'meeymirita.ru',
-      clientPort: 443,
-      protocol: 'wss'
-    } : {
-      host: 'localhost',
-      port: 5173
     }
   }
 })
