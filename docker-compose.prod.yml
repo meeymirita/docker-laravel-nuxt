@@ -139,6 +139,7 @@ services:
       - ldocker
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     environment:
+      - NODE_ENV=production
       - VITE_API_URL=https://meeymirita.ru/api
       - CHOKIDAR_USEPOLLING=true
 volumes:
