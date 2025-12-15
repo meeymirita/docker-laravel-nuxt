@@ -1,6 +1,5 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from "@/components/views/HomePage.vue";
+import HomePage from "@/pages/Home.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,13 +7,13 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "Главная",
       component: HomePage,
     },
     {
       path: "/register",
-      name: "Register",
-      component: () => import("@/components/views/Register.vue"),
+      name: "Регистрация",
+      component: () => import("@/pages/RegistrationPage.vue"),
     },
 
   ],
