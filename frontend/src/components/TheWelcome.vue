@@ -8,17 +8,17 @@ import SupportIcon from './icons/IconSupport.vue'
 </script>
 
 <template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon/>
-    </template>
-    <router-link
-      to="/register"
-      :style="{ color: '#00BD7E', fontSize: '19px', textDecoration: 'none' }"
-    >
-      Регистрация
-    </router-link>
-  </WelcomeItem>
+<!--  <WelcomeItem>-->
+<!--    <template #icon>-->
+<!--      <DocumentationIcon/>-->
+<!--    </template>-->
+<!--    <router-link-->
+<!--      to="/register"-->
+<!--      :style="{ color: '#00BD7E', fontSize: '19px', textDecoration: 'none' }"-->
+<!--    >-->
+<!--      Регистрация-->
+<!--    </router-link>-->
+<!--  </WelcomeItem>-->
 
 <!--  <WelcomeItem>-->
 <!--    <template #icon>-->

@@ -1,24 +1,24 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import Register from "@/components/views/Register.vue";
-import App from "@/App.vue";
-
-const routes = [
-  {
-    path: '/',
-    name: 'App',
-    component: App
-  },
-  {
-    path: '/register',  // URL путь
-    name: 'Register',   // имя маршрута
-    component: Register // компонент для отображения
-  },
-]
+import HomePage from "@/components/views/HomePage.vue";
 
 const router = createRouter({
-  history: createWebHistory(),  // чистые URL
-  routes
-})
+  history: createWebHistory(import.meta.env.BASE_URL),
 
-export default router
+  routes: [
+    {
+      path: "/",
+      name: "home",
+      component: HomePage,
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: () => import("@/components/views/Register.vue"),
+    },
+
+  ],
+
+});
+
+export default router;
