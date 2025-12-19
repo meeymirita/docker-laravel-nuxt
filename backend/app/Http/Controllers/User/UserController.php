@@ -5,16 +5,25 @@ namespace App\Http\Controllers\User;
 use App\Contracts\UserCreateInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Resources\User\LoginResponseResource;
 use App\Http\Resources\User\RegisterResponseResource;
-use App\Models\User;
+use App\Services\User\AuthService;
+use Dotenv\Exception\ValidationException;
+use Illuminate\Http\Client\Request;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
     public UserCreateInterface $userCreate;
+    public AuthService $authService;
 
-    public function __construct(UserCreateInterface $userCreate)
+    public function __construct(
+        UserCreateInterface $userCreate,
+        AuthService $authService
+    )
     {
         $this->userCreate = $userCreate;
+        $this->authService = $authService;
     }
 
     public function register(CreateUserRequest $request)
@@ -24,6 +33,33 @@ class UserController extends Controller
             return new RegisterResponseResource($data);
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Ошибка регистрации', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function login(Request $request): JsonResponse
+    {
+        try {
+            $data = $this->authService->login($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Авторизация успешна',
+                'data' => new LoginResponseResource($data)
+            ], 200);
+
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибки валидации',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка сервера',
+                'error' => $e->getMessage() ?: null
+            ], 500);
         }
     }
 

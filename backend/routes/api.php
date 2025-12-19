@@ -18,7 +18,7 @@ Route::prefix('user')->name('user.')->group(callback: function () {
     Route::post('/send-verification-code', [SendVerificationCodeController::class, 'sendCode']);
     Route::post('/resend-verification-code', [SendVerificationCodeController::class, 'resendCode']);
     // вход в аккаунт
-//    Route::post('/login', action: [UserController::class, 'login'])->name('login');
+    Route::post('/login', action: [UserController::class, 'login'])->name('login');
 
 //    /*
 //     * Отдаёт текущего пользователя с его постами пагинация на 10 постов
