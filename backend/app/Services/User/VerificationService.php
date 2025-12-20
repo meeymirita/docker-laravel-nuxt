@@ -5,9 +5,13 @@ namespace App\Services\User;
 use App\Mail\VerificationCodeMail;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Random\RandomException;
 
 class VerificationService
 {
+    /**
+     * @throws RandomException
+     */
     public function sendVerificationCode(User $user): bool
     {
         // генерация кода

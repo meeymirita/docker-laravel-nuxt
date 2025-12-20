@@ -9,7 +9,7 @@ use App\Http\Controllers\User\VerifyEmailController;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Support\Facades\Route;
-//  без защиты
+//  без защиты events
 Route::prefix('user')->name('user.')->group(callback: function () {
     //ругистрация с отправкой письма на почту для подтверждения её
     Route::post( '/register', action: [UserController::class, 'register'])->name('register');
