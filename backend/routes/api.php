@@ -82,6 +82,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
 // тест
+Route::get('/test', function () {
+    $user = [
+        'name'=> 'mirita',
+    ];
+    \App\Events\TestEvent::dispatch($user);
+    return response()->json(['message' => 'Test data']);
+});
+
 Route::get('/check-image-path', function () {
     $paths = [
         'storage_path' => storage_path('app/public/imagesToEmails/registerImage/himary.jpg'),
@@ -138,9 +146,6 @@ Route::get('/test-queues', function () {
         'queues' => ['high', 'default', 'low']
     ]);
 });
-Route::get('/test', function () {
-    return 'api test';
-});
 Route::get('/test-mail', function () {
     try {
         \Mail::raw('Тестовое письмо из Laravel', function ($message) {
@@ -163,8 +168,6 @@ Route::get('/test-mail', function () {
 // docker-compose -f docker-compose.prod.yml exec laravel bash лара
 // docker-compose -f docker-compose.prod.yml up -d поднять
 Route::get('/test-limit', [TestController::class, 'testLimit']);
-
-
 //mysql
 //  docker-compose -f docker-compose.prod.yml exec mysql bash
 // mysql -u root -p / password
