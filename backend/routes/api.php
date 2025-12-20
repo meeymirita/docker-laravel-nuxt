@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\UserLoggedInEvent;
 use App\Http\Controllers\Image\ImageController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Post\PostController;
@@ -138,8 +139,83 @@ Route::get('/test-queues', function () {
         'queues' => ['high', 'default', 'low']
     ]);
 });
+Route::get('/test-rabbitmq-connection', function () {
+    try {
+        // Проверка соединения с RabbitMQ
+        $connection = app('queue')->connection('rabbitmq');
+        $queue = $connection->getQueue();
+
+        return response()->json([
+            'status' => 'success',
+            'queue_connection' => 'rabbitmq',
+            'queue_name' => $queue,
+            'config' => [
+                'host' => env('RABBITMQ_HOST'),
+                'port' => env('RABBITMQ_PORT'),
+                'user' => env('RABBITMQ_USER'),
+                'queue' => env('RABBITMQ_QUEUE')
+            ]
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'suggestion' => 'Check if RabbitMQ container is running: docker ps | grep rabbitmq'
+        ], 500);
+    }
+});
+
+// Добавьте в routes/api.php
+Route::get('/test-simple-event', function () {
+    // 1. Очищаем все предыдущие регистрации
+    \Illuminate\Support\Facades\Event::forget(\App\Events\UserLoggedInEvent::class);
+
+    // 2. Вручную регистрируем ТОЛЬКО ОДИН listener
+    \Illuminate\Support\Facades\Event::listen(
+        \App\Events\UserLoggedInEvent::class,
+        [\App\Listeners\UserLoggedInHandler::class, 'handle']
+    );
+
+    // 3. Проверяем количество
+    $listeners = \Illuminate\Support\Facades\Event::getListeners(
+        \App\Events\UserLoggedInEvent::class
+    );
+
+    // 4. Логируем начало теста
+    \Log::info('===== SIMPLE TEST START =====');
+
+    // 5. Создаем уникальные данные для отслеживания
+    $data = [
+        'name' => 'mirita',
+        'skill' => 'php',
+        'unique_id' => uniqid(),
+        'timestamp' => microtime(true)
+    ];
+
+    // 6. Диспатчим событие
+    \App\Events\UserLoggedInEvent::dispatch($data);
+
+    // 7. Логируем конец теста
+    \Log::info('===== SIMPLE TEST END ===== ', $data);
+
+    return response()->json([
+        'test_type' => 'simple_event_test',
+        'listeners_count' => count($listeners),
+        'expected' => 1,
+        'data' => $data,
+        'instructions' => 'Check storage/logs/laravel.log for listener output'
+    ]);
+});
+
 Route::get('/test', function () {
-    return 'api test';
+    $data = [
+        'name' => 'mirita',
+        'skill' => 'php'
+    ];
+    \App\Events\UserLoggedInEvent::dispatch($data);
+    return response()->json([
+        'data' => $data,
+    ]);
 });
 Route::get('/test-mail', function () {
     try {

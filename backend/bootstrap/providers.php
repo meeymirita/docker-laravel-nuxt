@@ -2,5 +2,6 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    \App\Providers\User\UserServiceProvider::class,
+    App\Providers\EventServiceProvider::class,
+    App\Providers\User\UserServiceProvider::class,
 ];
