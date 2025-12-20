@@ -82,12 +82,21 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
 // тест
-Route::get('/test', function () {
-    $user = [
-        'name'=> 'mirita',
-    ];
-    \App\Events\TestEvent::dispatch($user);
-    return response()->json(['message' => 'Test data']);
+Route::get('/test-queueqqq', function() {
+    $user = App\Models\User::first();
+
+    if (!$user) {
+        return 'No users found';
+    }
+    $q = config('rabbitmq.queues.emails');
+    // Запускаем несколько заданий
+    for ($i = 0; $i < 111; $i++) {
+        App\Events\VerificationCodeMailEvent::dispatch(
+            $user, 123, $q
+        );
+    }
+
+    return '.';
 });
 
 Route::get('/check-image-path', function () {

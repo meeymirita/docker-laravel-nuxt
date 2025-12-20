@@ -47,14 +47,9 @@ return [
         // Основная очередь
         'default' => env('RABBITMQ_QUEUE', 'laravel_queue'),
         // очереди под посты
-        'post_created' => 'post_created', // Создание поста
-        'post_updated' => 'post_updated', // Обновление поста
-        'post_deleted' => 'post_deleted', // Удаление поста
-
-        // Пользователи
-        'users_created' => 'users_created', // Создание пользователя
-        'users_updated' => 'users_updated', // Обновление пользователя
-        'users_deleted' => 'users_deleted', // Удаление пользователя
+        'post_created' => 'post_created',
+        'post_updated' => 'post_updated',
+        'post_deleted' => 'post_deleted',
 
 
         'notifications' => 'notifications_queue',

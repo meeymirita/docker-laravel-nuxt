@@ -2,28 +2,35 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use AllowDynamicProperties;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TestEvent
+class VerificationCodeMailEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public User $user;
+    public string $code;
+
     /**
-     * Create a new event instance.
+     * @param User $user
+     * @param string $code
      */
-    public $user;
-    public function __construct(
-        array $user
-    )
+    public function __construct(User $user, string $code)
     {
         $this->user = $user;
+        $this->code = $code;
+        \Log::info('пришло в ивент', [
+                'user' => $user,
+                'code' => $code,
+            ]
+        );
     }
+
 
     /**
      * Get the channels the event should broadcast on.
