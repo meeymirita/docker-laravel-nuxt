@@ -20,6 +20,11 @@ Route::prefix('user')->name('user.')->group(callback: function () {
     // вход в аккаунт
     Route::post('/login', action: [UserController::class, 'login'])->name('login');
 
+    // выход из аккаунта
+    Route::post('/logout', action: [UserController::class, 'logout'])
+        ->middleware(['auth:sanctum'])
+        ->name('logout');
+
 //    /*
 //     * Отдаёт текущего пользователя с его постами пагинация на 10 постов
 //     */
@@ -82,6 +87,70 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
 // тест
+Route::get('/debug-email-urls', function () {
+    $data = [
+        'app_url' => config('app.url'),
+        'current_url' => url('/'),
+        'full_url' => url()->full(),
+        'scheme_and_host' => request()->getSchemeAndHttpHost(),
+        'root' => url(''),
+
+        // Что использует Laravel для генерации URL в письмах
+        'asset_url_himary' => asset('storage/images/himary.jpg'),
+        'url_himary' => url('storage/images/himary.jpg'),
+    ];
+
+    return response()->json($data);
+});
+Route::get('/test-email', function () {
+    $user = \App\Models\User::first();
+
+    if (!$user) {
+        $user = \App\Models\User::create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
+    }
+
+    $mail = new \App\Mail\VerificationCodeMail($user, '123456');
+
+    // Предпросмотр
+    return $mail->render();
+});
+// Добавьте этот маршрут в routes/api.php
+// routes/web.php или routes/api.php
+Route::get('/show-image', function () {
+    $path = storage_path('app/public/images/himary.jpg');
+
+    return response()->file($path, [
+        'Content-Type' => 'image/jpeg',
+        'Content-Disposition' => 'inline; filename="himary.jpg"'
+    ]);
+});
+Route::get('/test-path', function() {
+    try {
+        \Mail::raw('Тестовое письмо из Laravel', function ($message) {
+            $email = 'nik.lyamkin@yandex.ru';
+            //роверил в сообщения так ставить storage_path('app/public/me.jpg')
+            // Attachment::fromPath из доки https://laravel.com/docs/12.x/mail
+            $attachment = Attachment::fromPath(public_path('himary.jpg'));
+            // к меседжу
+            $message->attach($attachment);
+
+            $message->to($email)
+                ->subject('Тест отправки почты');
+        });
+
+        return response()->json([
+            'storage_path' => storage_path('app/public/images/himary.jpg'), // Базовый путь storage
+            'app_path' => app_path(),         // Путь к app/
+            'public_path' => public_path(),   // Путь к public/
+            'base_path' => base_path(),       // Корень проекта
+        ]);
+    } catch (\Exception $e) {
+        return 'Ошибка: ' . $e->getMessage();
+    }
+});
 Route::get('/test-queueqqq', function() {
     $user = App\Models\User::first();
 
@@ -176,7 +245,6 @@ Route::get('/test-mail', function () {
 });
 // docker-compose -f docker-compose.prod.yml exec laravel bash лара
 // docker-compose -f docker-compose.prod.yml up -d поднять
-Route::get('/test-limit', [TestController::class, 'testLimit']);
 //mysql
 //  docker-compose -f docker-compose.prod.yml exec mysql bash
 // mysql -u root -p / password

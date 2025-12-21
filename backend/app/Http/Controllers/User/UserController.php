@@ -9,9 +9,8 @@ use App\Http\Resources\User\LoginResponseResource;
 use App\Http\Resources\User\RegisterResponseResource;
 use App\Services\User\AuthService;
 use Dotenv\Exception\ValidationException;
-use Illuminate\Http\Client\Request;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public UserCreateInterface $userCreate;
@@ -19,7 +18,7 @@ class UserController extends Controller
 
     public function __construct(
         UserCreateInterface $userCreate,
-        AuthService $authService
+        AuthService         $authService
     )
     {
         $this->userCreate = $userCreate;
@@ -61,6 +60,15 @@ class UserController extends Controller
                 'error' => $e->getMessage() ?: null
             ], 500);
         }
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        // удаление всех токенов пользователя
+        $request->user()->tokens()->delete();
+        return response()->json([
+            'status' => 'Вы вышли из аккаунта'
+        ]);
     }
 
 }

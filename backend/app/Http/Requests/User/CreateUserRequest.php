@@ -22,10 +22,8 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'email' => 'required|email:rfc,dns|unique:users,email|max:255',
-//            'password' => 'required|min:3|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
-            'email' => 'required|email',
-            'password' => 'required|min:3',
+            'email' => 'required|email:rfc,dns|unique:users,email|max:255',
+            'password' => 'required|min:3|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
         ];
     }
     public function messages(): array

@@ -32,6 +32,9 @@ class UserCreateService implements UserCreateInterface
                 'status' => UserStatus::Pending->value, // Не подтвержден
                 'password' => Hash::make($userData['password']),
             ]);
+            $token = $user->createToken(
+                'user_register', ['*'], now()->plus(weeks: 1)
+            )->plainTextToken;
             try {
                 // Отправляем код подтверждения
                 $this->verificationService->sendVerificationCode($user);
@@ -44,6 +47,7 @@ class UserCreateService implements UserCreateInterface
 
             return [
                 'user' => $user,
+                'token' => $token,
             ];
         });
     }

@@ -40,18 +40,28 @@ class VerificationCodeMail extends Mailable
         // http://localhost:8080/storage/images/himary.jpg
         // http://localhost:8080/storage/images/sakura.jpg
 //        \Log::info(url('storage/images/himary.jpg'));
+        $baseUrl = $this->determineBaseUrl();
         return new Content(
             view: 'emails.verification',
             with: [
                 'user' => $this->user,
                 'code' => $this->code,
                 'frontend_url' => 'https://meeymirita.ru/',
-                'himary_url' => url('storage/images/himary.jpg'),
-                'sakura_url' => url('storage/images/sakura.jpg'),
+                'himary_url' => $baseUrl . '/storage/images/himary.jpg',
+                'sakura_url' => $baseUrl . '/storage/images/sakura.jpg',
             ]
         );
     }
+    private function determineBaseUrl(): string
+    {
+        // Если мы в консоли (очередь, команда)
+        if (app()->runningInConsole()) {
+            return config('app.url') ?: 'http://82.202.143.65';
+        }
 
+        // Иначе берем из текущего запроса (с портом!)
+        return request()->getSchemeAndHttpHost();
+    }
     /**
      * Get the attachments for the message.
      *

@@ -18,6 +18,7 @@ class RegisterResponseResource extends JsonResource
             'success' => true,
             'user'=> new UserResource($this->resource['user']),
             'requires_verification' => true,
+            'token' => $this->resource['token'],
         ];
     }
 

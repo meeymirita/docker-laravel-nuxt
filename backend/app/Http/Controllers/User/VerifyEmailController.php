@@ -41,7 +41,8 @@ class VerifyEmailController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Email успешно подтвержден'
+            'message' => 'Email успешно подтвержден',
+            'token' => $user->token
         ]);
     }
 }
