@@ -29,7 +29,6 @@ class VerificationCodeMailListener implements ShouldQueue
      */
     public function handle(VerificationCodeMailEvent $event): void
     {
-        \Log::info('=== НАЧАЛО handle() ===');
         \Log::info('пришло в листенер', [
             'user_id' => $event->user->id,
             'email' => $event->user->email,

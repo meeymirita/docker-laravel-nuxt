@@ -87,6 +87,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
 // тест
+Route::get('/test', function () {
+    $user = [
+        'name' => 'John Doe',
+        'email' => 'john@doe.com',
+    ];
+    \App\Events\WelcomeForSuccessVerificationCodeEvent::dispatch($user);
+    return response()->json([
+        'qwerty' => 'qwerty'
+    ]);
+});
 Route::get('/debug-email-urls', function () {
     $data = [
         'app_url' => config('app.url'),
@@ -167,7 +177,6 @@ Route::get('/test-queueqqq', function() {
 
     return '.';
 });
-
 Route::get('/check-image-path', function () {
     $paths = [
         'storage_path' => storage_path('app/public/imagesToEmails/registerImage/himary.jpg'),
