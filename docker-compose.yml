@@ -7,6 +7,7 @@ x-healthcheck-defaults: &healthcheck-defaults
   start_period: 60s
 
 services:
+
   grafana:
     image: grafana/grafana-enterprise
     container_name: grafana
@@ -44,7 +45,6 @@ services:
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}" ]
       <<: *healthcheck-defaults
-  #redis
   redis:
     image: dockerhub.timeweb.cloud/library/redis:7.2-alpine
     container_name: redis
@@ -65,7 +65,6 @@ services:
     healthcheck:
       test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       <<: *healthcheck-defaults
-
   rabbitmq:
     image: dockerhub.timeweb.cloud/library/rabbitmq:4.0-management-alpine
     container_name: rabbitmq
@@ -84,8 +83,6 @@ services:
     healthcheck:
       test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
       <<: *healthcheck-defaults
-
-
   nginx:
     image: dockerhub.timeweb.cloud/library/nginx:1.29.2
     container_name: nginx
@@ -104,7 +101,6 @@ services:
       test: [ "CMD", "nginx", "-t" ]
       <<: *healthcheck-defaults
       start_period: 10s
-
   laravel:
     build:
       context: ./backend
@@ -164,7 +160,6 @@ services:
       test: [ "CMD", "php", "artisan", "env" ]
       <<: *healthcheck-defaults
       timeout: 200s
-
   phpmyadmin:
     image: dockerhub.timeweb.cloud/library/phpmyadmin:5.2.3
     container_name: phpmyadmin
@@ -183,7 +178,6 @@ services:
         condition: service_healthy
     networks:
       - app-network
-
   vuejs:
     image: dockerhub.timeweb.cloud/library/node:25-alpine
     container_name: vue-app
@@ -200,7 +194,6 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8080/api
       - CHOKIDAR_USEPOLLING=true
-
   mailpit:
     image: axllent/mailpit:latest
     container_name: mailpit

@@ -17,7 +17,7 @@ class TagFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->unique()->words(2, true); // Два слова для тега
+        $name = fake()->unique()->words(3, true); // Два слова для тега
 
         return [
             'name' => $name,

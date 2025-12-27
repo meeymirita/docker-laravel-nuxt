@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\UserStatus;
+use App\Enums\UserType;
 use App\Http\Controllers\Image\ImageController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Post\PostController;
@@ -9,6 +11,8 @@ use App\Http\Controllers\User\VerifyEmailController;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Support\Facades\Route;
+use Predis\Response\Status;
+
 //  без защиты
 Route::prefix('user')->name('user.')->group(callback: function () {
     //ругистрация с отправкой письма на почту для подтверждения её
@@ -88,14 +92,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 // тест
 Route::get('/test', function () {
-    $user = [
-        'name' => 'John Doe',
-        'email' => 'john@doe.com',
-    ];
-    \App\Events\WelcomeForSuccessVerificationCodeEvent::dispatch($user);
-    return response()->json([
-        'qwerty' => 'qwerty'
-    ]);
+    return 'asd';
 });
 Route::get('/debug-email-urls', function () {
     $data = [

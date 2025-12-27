@@ -20,10 +20,8 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
-        // Случайно выбираем: изображение в посте или в комментарии
         $imageableType = fake()->randomElement([Post::class, Comment::class]);
 
-        // Генерируем реалистичное имя файла
         $filename = Str::random(10) . '.' . fake()->randomElement(['jpg', 'png', 'webp']);
 
         return [
